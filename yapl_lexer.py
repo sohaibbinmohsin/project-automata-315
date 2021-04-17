@@ -3,7 +3,7 @@ import ply.lex as lex
 tokens = [
     'INT',
     'FLOAT',
-    'CHAR'
+    'CHAR',
     'STRING',
     'BOOL',
     'PLUS',
@@ -11,8 +11,9 @@ tokens = [
     'MULTIPLICATION',
     'DIVISION',
     'REMAINDER',
-    'SEMICOLON',
-    'PRINT'
+    'SEMICOL',
+    'PRINT',
+    'NAME'
 ]
 
 t_PLUS = r'\+'
@@ -20,8 +21,22 @@ t_MINUS = r'\-'
 t_MULTIPLICATION = r'\*'
 t_DIVISION = r'\\'
 t_REMAINDER = r'\%'
-t_SEMICOLON = r'\;'
+t_SEMICOL = r'\;'
 t_ignore = '\t\r\n\f\v '
+
+def t_NAME(t): #keywords
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    if t.value == 'print':
+        t.type = 'PRINT'
+    elif t.value == 'bool':
+        t.type = 'BOOL'
+    elif t.value == 'char':
+        t.type = 'CHAR'
+    elif t.value == 'string':
+        t.type = 'STRING'
+    else:
+        t.type = 'NAME'
+    return t
 
 def t_INT(t):
     r'\d+'
@@ -44,12 +59,12 @@ def t_error(t):
     
 lexer = lex.lex()
 
-while True:
-    print("YAPL_LEXER>>", end='')
-    lexer.input(input())
+# while True:
+#     print("YAPL_LEXER>>", end='')
+#     lexer.input(input())
     
-    while True:
-        tokenEntered = lexer.token()
-        if not tokenEntered:
-            break
-        print(tokenEntered)
+#     while True:
+#         tokenEntered = lexer.token()
+#         if not tokenEntered:
+#             break
+#         print(tokenEntered)
