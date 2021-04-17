@@ -1,4 +1,5 @@
 import ply.lex as lex
+import re
 
 tokens = [
     'INT',
@@ -10,17 +11,23 @@ tokens = [
     'MINUS',
     'MULTIPLICATION',
     'DIVISION',
-    'REMAINDER',
+    'MODULO',
+    'POW',
+    'INCREMENT',
+    'DECREMENT',
     'SEMICOL',
-    'PRINT',
-    'NAME'
+    'NAME',
+    'PRINT'
 ]
 
+t_INCREMENT = r'\+\+'
+t_DECREMENT = r'\-\-'
 t_PLUS = r'\+'
 t_MINUS = r'\-'
 t_MULTIPLICATION = r'\*'
-t_DIVISION = r'\\'
-t_REMAINDER = r'\%'
+t_DIVISION = r'\/'
+t_MODULO = r'\%'
+t_POW = r'\^'
 t_SEMICOL = r'\;'
 t_ignore = '\t\r\n\f\v '
 

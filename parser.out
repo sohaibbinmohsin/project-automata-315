@@ -1,0 +1,479 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    BOOL
+    CHAR
+    FLOAT
+    NAME
+    STRING
+
+Grammar
+
+Rule 0     S' -> S
+Rule 1     S -> stmt S
+Rule 2     S -> <empty>
+Rule 3     stmt -> PRINT exp SEMICOL
+Rule 4     exp -> exp PLUS exp
+Rule 5     exp -> exp MINUS exp
+Rule 6     exp -> exp MULTIPLICATION exp
+Rule 7     exp -> exp DIVISION exp
+Rule 8     exp -> exp MODULO exp
+Rule 9     exp -> exp POW exp
+Rule 10    exp -> exp INCREMENT
+Rule 11    exp -> exp DECREMENT
+Rule 12    exp -> INT
+
+Terminals, with rules where they appear
+
+BOOL                 : 
+CHAR                 : 
+DECREMENT            : 11
+DIVISION             : 7
+FLOAT                : 
+INCREMENT            : 10
+INT                  : 12
+MINUS                : 5
+MODULO               : 8
+MULTIPLICATION       : 6
+NAME                 : 
+PLUS                 : 4
+POW                  : 9
+PRINT                : 3
+SEMICOL              : 3
+STRING               : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+S                    : 1 0
+exp                  : 3 4 4 5 5 6 6 7 7 8 8 9 9 10 11
+stmt                 : 1
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . S
+    (1) S -> . stmt S
+    (2) S -> .
+    (3) stmt -> . PRINT exp SEMICOL
+
+    $end            reduce using rule 2 (S -> .)
+    PRINT           shift and go to state 3
+
+    S                              shift and go to state 1
+    stmt                           shift and go to state 2
+
+state 1
+
+    (0) S' -> S .
+
+
+
+state 2
+
+    (1) S -> stmt . S
+    (1) S -> . stmt S
+    (2) S -> .
+    (3) stmt -> . PRINT exp SEMICOL
+
+    $end            reduce using rule 2 (S -> .)
+    PRINT           shift and go to state 3
+
+    stmt                           shift and go to state 2
+    S                              shift and go to state 4
+
+state 3
+
+    (3) stmt -> PRINT . exp SEMICOL
+    (4) exp -> . exp PLUS exp
+    (5) exp -> . exp MINUS exp
+    (6) exp -> . exp MULTIPLICATION exp
+    (7) exp -> . exp DIVISION exp
+    (8) exp -> . exp MODULO exp
+    (9) exp -> . exp POW exp
+    (10) exp -> . exp INCREMENT
+    (11) exp -> . exp DECREMENT
+    (12) exp -> . INT
+
+    INT             shift and go to state 6
+
+    exp                            shift and go to state 5
+
+state 4
+
+    (1) S -> stmt S .
+
+    $end            reduce using rule 1 (S -> stmt S .)
+
+
+state 5
+
+    (3) stmt -> PRINT exp . SEMICOL
+    (4) exp -> exp . PLUS exp
+    (5) exp -> exp . MINUS exp
+    (6) exp -> exp . MULTIPLICATION exp
+    (7) exp -> exp . DIVISION exp
+    (8) exp -> exp . MODULO exp
+    (9) exp -> exp . POW exp
+    (10) exp -> exp . INCREMENT
+    (11) exp -> exp . DECREMENT
+
+    SEMICOL         shift and go to state 7
+    PLUS            shift and go to state 8
+    MINUS           shift and go to state 9
+    MULTIPLICATION  shift and go to state 10
+    DIVISION        shift and go to state 11
+    MODULO          shift and go to state 12
+    POW             shift and go to state 13
+    INCREMENT       shift and go to state 14
+    DECREMENT       shift and go to state 15
+
+
+state 6
+
+    (12) exp -> INT .
+
+    SEMICOL         reduce using rule 12 (exp -> INT .)
+    PLUS            reduce using rule 12 (exp -> INT .)
+    MINUS           reduce using rule 12 (exp -> INT .)
+    MULTIPLICATION  reduce using rule 12 (exp -> INT .)
+    DIVISION        reduce using rule 12 (exp -> INT .)
+    MODULO          reduce using rule 12 (exp -> INT .)
+    POW             reduce using rule 12 (exp -> INT .)
+    INCREMENT       reduce using rule 12 (exp -> INT .)
+    DECREMENT       reduce using rule 12 (exp -> INT .)
+
+
+state 7
+
+    (3) stmt -> PRINT exp SEMICOL .
+
+    PRINT           reduce using rule 3 (stmt -> PRINT exp SEMICOL .)
+    $end            reduce using rule 3 (stmt -> PRINT exp SEMICOL .)
+
+
+state 8
+
+    (4) exp -> exp PLUS . exp
+    (4) exp -> . exp PLUS exp
+    (5) exp -> . exp MINUS exp
+    (6) exp -> . exp MULTIPLICATION exp
+    (7) exp -> . exp DIVISION exp
+    (8) exp -> . exp MODULO exp
+    (9) exp -> . exp POW exp
+    (10) exp -> . exp INCREMENT
+    (11) exp -> . exp DECREMENT
+    (12) exp -> . INT
+
+    INT             shift and go to state 6
+
+    exp                            shift and go to state 16
+
+state 9
+
+    (5) exp -> exp MINUS . exp
+    (4) exp -> . exp PLUS exp
+    (5) exp -> . exp MINUS exp
+    (6) exp -> . exp MULTIPLICATION exp
+    (7) exp -> . exp DIVISION exp
+    (8) exp -> . exp MODULO exp
+    (9) exp -> . exp POW exp
+    (10) exp -> . exp INCREMENT
+    (11) exp -> . exp DECREMENT
+    (12) exp -> . INT
+
+    INT             shift and go to state 6
+
+    exp                            shift and go to state 17
+
+state 10
+
+    (6) exp -> exp MULTIPLICATION . exp
+    (4) exp -> . exp PLUS exp
+    (5) exp -> . exp MINUS exp
+    (6) exp -> . exp MULTIPLICATION exp
+    (7) exp -> . exp DIVISION exp
+    (8) exp -> . exp MODULO exp
+    (9) exp -> . exp POW exp
+    (10) exp -> . exp INCREMENT
+    (11) exp -> . exp DECREMENT
+    (12) exp -> . INT
+
+    INT             shift and go to state 6
+
+    exp                            shift and go to state 18
+
+state 11
+
+    (7) exp -> exp DIVISION . exp
+    (4) exp -> . exp PLUS exp
+    (5) exp -> . exp MINUS exp
+    (6) exp -> . exp MULTIPLICATION exp
+    (7) exp -> . exp DIVISION exp
+    (8) exp -> . exp MODULO exp
+    (9) exp -> . exp POW exp
+    (10) exp -> . exp INCREMENT
+    (11) exp -> . exp DECREMENT
+    (12) exp -> . INT
+
+    INT             shift and go to state 6
+
+    exp                            shift and go to state 19
+
+state 12
+
+    (8) exp -> exp MODULO . exp
+    (4) exp -> . exp PLUS exp
+    (5) exp -> . exp MINUS exp
+    (6) exp -> . exp MULTIPLICATION exp
+    (7) exp -> . exp DIVISION exp
+    (8) exp -> . exp MODULO exp
+    (9) exp -> . exp POW exp
+    (10) exp -> . exp INCREMENT
+    (11) exp -> . exp DECREMENT
+    (12) exp -> . INT
+
+    INT             shift and go to state 6
+
+    exp                            shift and go to state 20
+
+state 13
+
+    (9) exp -> exp POW . exp
+    (4) exp -> . exp PLUS exp
+    (5) exp -> . exp MINUS exp
+    (6) exp -> . exp MULTIPLICATION exp
+    (7) exp -> . exp DIVISION exp
+    (8) exp -> . exp MODULO exp
+    (9) exp -> . exp POW exp
+    (10) exp -> . exp INCREMENT
+    (11) exp -> . exp DECREMENT
+    (12) exp -> . INT
+
+    INT             shift and go to state 6
+
+    exp                            shift and go to state 21
+
+state 14
+
+    (10) exp -> exp INCREMENT .
+
+    SEMICOL         reduce using rule 10 (exp -> exp INCREMENT .)
+    PLUS            reduce using rule 10 (exp -> exp INCREMENT .)
+    MINUS           reduce using rule 10 (exp -> exp INCREMENT .)
+    MULTIPLICATION  reduce using rule 10 (exp -> exp INCREMENT .)
+    DIVISION        reduce using rule 10 (exp -> exp INCREMENT .)
+    MODULO          reduce using rule 10 (exp -> exp INCREMENT .)
+    POW             reduce using rule 10 (exp -> exp INCREMENT .)
+    INCREMENT       reduce using rule 10 (exp -> exp INCREMENT .)
+    DECREMENT       reduce using rule 10 (exp -> exp INCREMENT .)
+
+
+state 15
+
+    (11) exp -> exp DECREMENT .
+
+    SEMICOL         reduce using rule 11 (exp -> exp DECREMENT .)
+    PLUS            reduce using rule 11 (exp -> exp DECREMENT .)
+    MINUS           reduce using rule 11 (exp -> exp DECREMENT .)
+    MULTIPLICATION  reduce using rule 11 (exp -> exp DECREMENT .)
+    DIVISION        reduce using rule 11 (exp -> exp DECREMENT .)
+    MODULO          reduce using rule 11 (exp -> exp DECREMENT .)
+    POW             reduce using rule 11 (exp -> exp DECREMENT .)
+    INCREMENT       reduce using rule 11 (exp -> exp DECREMENT .)
+    DECREMENT       reduce using rule 11 (exp -> exp DECREMENT .)
+
+
+state 16
+
+    (4) exp -> exp PLUS exp .
+    (4) exp -> exp . PLUS exp
+    (5) exp -> exp . MINUS exp
+    (6) exp -> exp . MULTIPLICATION exp
+    (7) exp -> exp . DIVISION exp
+    (8) exp -> exp . MODULO exp
+    (9) exp -> exp . POW exp
+    (10) exp -> exp . INCREMENT
+    (11) exp -> exp . DECREMENT
+
+    SEMICOL         reduce using rule 4 (exp -> exp PLUS exp .)
+    PLUS            shift and go to state 8
+    MINUS           shift and go to state 9
+    MULTIPLICATION  shift and go to state 10
+    DIVISION        shift and go to state 11
+    MODULO          shift and go to state 12
+    POW             shift and go to state 13
+    INCREMENT       shift and go to state 14
+    DECREMENT       shift and go to state 15
+
+  ! PLUS            [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+  ! MINUS           [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+  ! MULTIPLICATION  [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+  ! DIVISION        [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+  ! MODULO          [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+  ! POW             [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+  ! INCREMENT       [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+  ! DECREMENT       [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+
+
+state 17
+
+    (5) exp -> exp MINUS exp .
+    (4) exp -> exp . PLUS exp
+    (5) exp -> exp . MINUS exp
+    (6) exp -> exp . MULTIPLICATION exp
+    (7) exp -> exp . DIVISION exp
+    (8) exp -> exp . MODULO exp
+    (9) exp -> exp . POW exp
+    (10) exp -> exp . INCREMENT
+    (11) exp -> exp . DECREMENT
+
+    SEMICOL         reduce using rule 5 (exp -> exp MINUS exp .)
+    PLUS            shift and go to state 8
+    MINUS           shift and go to state 9
+    MULTIPLICATION  shift and go to state 10
+    DIVISION        shift and go to state 11
+    MODULO          shift and go to state 12
+    POW             shift and go to state 13
+    INCREMENT       shift and go to state 14
+    DECREMENT       shift and go to state 15
+
+  ! PLUS            [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+  ! MINUS           [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+  ! MULTIPLICATION  [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+  ! DIVISION        [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+  ! MODULO          [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+  ! POW             [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+  ! INCREMENT       [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+  ! DECREMENT       [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+
+
+state 18
+
+    (6) exp -> exp MULTIPLICATION exp .
+    (4) exp -> exp . PLUS exp
+    (5) exp -> exp . MINUS exp
+    (6) exp -> exp . MULTIPLICATION exp
+    (7) exp -> exp . DIVISION exp
+    (8) exp -> exp . MODULO exp
+    (9) exp -> exp . POW exp
+    (10) exp -> exp . INCREMENT
+    (11) exp -> exp . DECREMENT
+
+    SEMICOL         reduce using rule 6 (exp -> exp MULTIPLICATION exp .)
+    PLUS            shift and go to state 8
+    MINUS           shift and go to state 9
+    MULTIPLICATION  shift and go to state 10
+    DIVISION        shift and go to state 11
+    MODULO          shift and go to state 12
+    POW             shift and go to state 13
+    INCREMENT       shift and go to state 14
+    DECREMENT       shift and go to state 15
+
+  ! PLUS            [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+  ! MINUS           [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+  ! MULTIPLICATION  [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+  ! DIVISION        [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+  ! MODULO          [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+  ! POW             [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+  ! INCREMENT       [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+  ! DECREMENT       [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+
+
+state 19
+
+    (7) exp -> exp DIVISION exp .
+    (4) exp -> exp . PLUS exp
+    (5) exp -> exp . MINUS exp
+    (6) exp -> exp . MULTIPLICATION exp
+    (7) exp -> exp . DIVISION exp
+    (8) exp -> exp . MODULO exp
+    (9) exp -> exp . POW exp
+    (10) exp -> exp . INCREMENT
+    (11) exp -> exp . DECREMENT
+
+    SEMICOL         reduce using rule 7 (exp -> exp DIVISION exp .)
+    PLUS            shift and go to state 8
+    MINUS           shift and go to state 9
+    MULTIPLICATION  shift and go to state 10
+    DIVISION        shift and go to state 11
+    MODULO          shift and go to state 12
+    POW             shift and go to state 13
+    INCREMENT       shift and go to state 14
+    DECREMENT       shift and go to state 15
+
+  ! PLUS            [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+  ! MINUS           [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+  ! MULTIPLICATION  [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+  ! DIVISION        [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+  ! MODULO          [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+  ! POW             [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+  ! INCREMENT       [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+  ! DECREMENT       [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+
+
+state 20
+
+    (8) exp -> exp MODULO exp .
+    (4) exp -> exp . PLUS exp
+    (5) exp -> exp . MINUS exp
+    (6) exp -> exp . MULTIPLICATION exp
+    (7) exp -> exp . DIVISION exp
+    (8) exp -> exp . MODULO exp
+    (9) exp -> exp . POW exp
+    (10) exp -> exp . INCREMENT
+    (11) exp -> exp . DECREMENT
+
+    SEMICOL         reduce using rule 8 (exp -> exp MODULO exp .)
+    PLUS            shift and go to state 8
+    MINUS           shift and go to state 9
+    MULTIPLICATION  shift and go to state 10
+    DIVISION        shift and go to state 11
+    MODULO          shift and go to state 12
+    POW             shift and go to state 13
+    INCREMENT       shift and go to state 14
+    DECREMENT       shift and go to state 15
+
+  ! PLUS            [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+  ! MINUS           [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+  ! MULTIPLICATION  [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+  ! DIVISION        [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+  ! MODULO          [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+  ! POW             [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+  ! INCREMENT       [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+  ! DECREMENT       [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+
+
+state 21
+
+    (9) exp -> exp POW exp .
+    (4) exp -> exp . PLUS exp
+    (5) exp -> exp . MINUS exp
+    (6) exp -> exp . MULTIPLICATION exp
+    (7) exp -> exp . DIVISION exp
+    (8) exp -> exp . MODULO exp
+    (9) exp -> exp . POW exp
+    (10) exp -> exp . INCREMENT
+    (11) exp -> exp . DECREMENT
+
+    SEMICOL         reduce using rule 9 (exp -> exp POW exp .)
+    PLUS            shift and go to state 8
+    MINUS           shift and go to state 9
+    MULTIPLICATION  shift and go to state 10
+    DIVISION        shift and go to state 11
+    MODULO          shift and go to state 12
+    POW             shift and go to state 13
+    INCREMENT       shift and go to state 14
+    DECREMENT       shift and go to state 15
+
+  ! PLUS            [ reduce using rule 9 (exp -> exp POW exp .) ]
+  ! MINUS           [ reduce using rule 9 (exp -> exp POW exp .) ]
+  ! MULTIPLICATION  [ reduce using rule 9 (exp -> exp POW exp .) ]
+  ! DIVISION        [ reduce using rule 9 (exp -> exp POW exp .) ]
+  ! MODULO          [ reduce using rule 9 (exp -> exp POW exp .) ]
+  ! POW             [ reduce using rule 9 (exp -> exp POW exp .) ]
+  ! INCREMENT       [ reduce using rule 9 (exp -> exp POW exp .) ]
+  ! DECREMENT       [ reduce using rule 9 (exp -> exp POW exp .) ]
+
