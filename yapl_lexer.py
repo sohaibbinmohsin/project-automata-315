@@ -32,3 +32,24 @@ def t_FLOAT(t):
     r'\d*\.\d+'
     t.value = float(t.value)
     return t
+
+def t_lineno(t):
+    r'\n'
+    t.lexer.lineno += len(t.value)
+
+def t_error(t):
+    print("[Lexer Error] Line", t.lineno)
+    print(f"Illegal character: {t.value}")
+    t.lexer.skip(1)
+    
+lexer = lex.lex()
+
+while True:
+    print("YAPL_LEXER>>", end='')
+    lexer.input(input())
+    
+    while True:
+        tokenEntered = lexer.token()
+        if not tokenEntered:
+            break
+        print(tokenEntered)
