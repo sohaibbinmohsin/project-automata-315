@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'SrightINCREMENTDECREMENTPOWMULTIPLICATIONDIVISIONMODULOPLUSMINUSBOOL CHAR DECREMENT DIVISION FLOAT INCREMENT INT MINUS MODULO MULTIPLICATION NAME PLUS POW PRINT SEMICOL STRING\n    S : stmt S\n    \n    S :\n    \n    stmt : PRINT exp SEMICOL\n     \n    exp : exp PLUS exp\n        | exp MINUS exp\n        | exp MULTIPLICATION exp\n        | exp DIVISION exp\n        | exp MODULO exp\n        | exp POW exp\n        | exp INCREMENT\n        | exp DECREMENT\n    \n    exp : INT\n    '
+_lr_signature = 'SrightINCREMENTDECREMENTPOWMULTIPLICATIONDIVISIONMODULOPLUSMINUSLESSTHANGREATERTHANLESSTHANOREQUALTOGREATERTHANOREQUALTOEQUALTONOTEQUALTOANDORNOTrightUMINUSAND BOOL CHAR COMMENT DECREMENT DEF DIVISION DOWHILE ELSE ELSEIF EQUALTO FLOAT GREATERTHAN GREATERTHANOREQUALTO IF INCREMENT INT LCURLY LESSTHAN LESSTHANOREQUALTO LPAREN MINUS MODULO MULTIPLICATION NAME NOT NOTEQUALTO OR PLUS POW PRINT RCURLY RPAREN SEMICOL STRING\n    S : stmt S\n    \n    S :\n    \n    stmt : PRINT exp SEMICOL\n     \n    exp : exp PLUS exp\n        | exp MINUS exp\n        | exp MULTIPLICATION exp\n        | exp DIVISION exp\n        | exp MODULO exp\n        | exp GREATERTHAN exp\n        | exp LESSTHAN exp\n        | exp GREATERTHANOREQUALTO exp\n        | exp LESSTHANOREQUALTO exp\n        | exp EQUALTO exp\n        | exp NOTEQUALTO exp\n        | exp AND exp\n        | exp OR exp\n        | exp POW exp\n        | exp INCREMENT\n        | exp DECREMENT\n        | exp NOT\n        | STRING\n    \n    exp : INT\n    exp : MINUS exp %prec UMINUS'
     
-_lr_action_items = {'$end':([0,1,2,4,7,],[-2,0,-2,-1,-3,]),'PRINT':([0,2,7,],[3,3,-3,]),'INT':([3,8,9,10,11,12,13,],[6,6,6,6,6,6,6,]),'SEMICOL':([5,6,14,15,16,17,18,19,20,21,],[7,-12,-10,-11,-4,-5,-6,-7,-8,-9,]),'PLUS':([5,6,14,15,16,17,18,19,20,21,],[8,-12,-10,-11,8,8,8,8,8,8,]),'MINUS':([5,6,14,15,16,17,18,19,20,21,],[9,-12,-10,-11,9,9,9,9,9,9,]),'MULTIPLICATION':([5,6,14,15,16,17,18,19,20,21,],[10,-12,-10,-11,10,10,10,10,10,10,]),'DIVISION':([5,6,14,15,16,17,18,19,20,21,],[11,-12,-10,-11,11,11,11,11,11,11,]),'MODULO':([5,6,14,15,16,17,18,19,20,21,],[12,-12,-10,-11,12,12,12,12,12,12,]),'POW':([5,6,14,15,16,17,18,19,20,21,],[13,-12,-10,-11,13,13,13,13,13,13,]),'INCREMENT':([5,6,14,15,16,17,18,19,20,21,],[14,-12,-10,-11,14,14,14,14,14,14,]),'DECREMENT':([5,6,14,15,16,17,18,19,20,21,],[15,-12,-10,-11,15,15,15,15,15,15,]),}
+_lr_action_items = {'$end':([0,1,2,4,9,],[-2,0,-2,-1,-3,]),'PRINT':([0,2,9,],[3,3,-3,]),'STRING':([3,6,10,11,12,13,14,15,16,17,18,19,20,21,22,23,],[7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,]),'INT':([3,6,10,11,12,13,14,15,16,17,18,19,20,21,22,23,],[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,]),'MINUS':([3,5,6,7,8,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[6,11,6,-21,-22,6,6,6,6,6,6,6,6,6,6,6,6,6,6,-18,-19,-20,-23,11,11,11,11,11,11,11,11,11,11,11,11,11,11,]),'SEMICOL':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[9,-21,-22,-18,-19,-20,-23,-4,-5,-6,-7,-8,-9,-10,-11,-12,-13,-14,-15,-16,-17,]),'PLUS':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[10,-21,-22,-18,-19,-20,-23,10,10,10,10,10,10,10,10,10,10,10,10,10,10,]),'MULTIPLICATION':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[12,-21,-22,-18,-19,-20,-23,12,12,12,12,12,12,12,12,12,12,12,12,12,12,]),'DIVISION':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[13,-21,-22,-18,-19,-20,-23,13,13,13,13,13,13,13,13,13,13,13,13,13,13,]),'MODULO':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[14,-21,-22,-18,-19,-20,-23,14,14,14,14,14,14,14,14,14,14,14,14,14,14,]),'GREATERTHAN':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[15,-21,-22,-18,-19,-20,-23,15,15,15,15,15,15,15,15,15,15,15,15,15,15,]),'LESSTHAN':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[16,-21,-22,-18,-19,-20,-23,16,16,16,16,16,16,16,16,16,16,16,16,16,16,]),'GREATERTHANOREQUALTO':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[17,-21,-22,-18,-19,-20,-23,17,17,17,17,17,17,17,17,17,17,17,17,17,17,]),'LESSTHANOREQUALTO':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[18,-21,-22,-18,-19,-20,-23,18,18,18,18,18,18,18,18,18,18,18,18,18,18,]),'EQUALTO':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[19,-21,-22,-18,-19,-20,-23,19,19,19,19,19,19,19,19,19,19,19,19,19,19,]),'NOTEQUALTO':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[20,-21,-22,-18,-19,-20,-23,20,20,20,20,20,20,20,20,20,20,20,20,20,20,]),'AND':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[21,-21,-22,-18,-19,-20,-23,21,21,21,21,21,21,21,21,21,21,21,21,21,21,]),'OR':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[22,-21,-22,-18,-19,-20,-23,22,22,22,22,22,22,22,22,22,22,22,22,22,22,]),'POW':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[23,-21,-22,-18,-19,-20,-23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,]),'INCREMENT':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[24,-21,-22,-18,-19,-20,-23,24,24,24,24,24,24,24,24,24,24,24,24,24,24,]),'DECREMENT':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[25,-21,-22,-18,-19,-20,-23,25,25,25,25,25,25,25,25,25,25,25,25,25,25,]),'NOT':([5,7,8,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,],[26,-21,-22,-18,-19,-20,-23,26,26,26,26,26,26,26,26,26,26,26,26,26,26,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'S':([0,2,],[1,4,]),'stmt':([0,2,],[2,2,]),'exp':([3,8,9,10,11,12,13,],[5,16,17,18,19,20,21,]),}
+_lr_goto_items = {'S':([0,2,],[1,4,]),'stmt':([0,2,],[2,2,]),'exp':([3,6,10,11,12,13,14,15,16,17,18,19,20,21,22,23,],[5,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,16 +27,27 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> S","S'",1,None,None,None),
-  ('S -> stmt S','S',2,'p_start','yapl_parser.py',19),
-  ('S -> <empty>','S',0,'p_start_empty','yapl_parser.py',26),
-  ('stmt -> PRINT exp SEMICOL','stmt',3,'p_print_stmt','yapl_parser.py',33),
-  ('exp -> exp PLUS exp','exp',3,'p_exp_bin','yapl_parser.py',40),
-  ('exp -> exp MINUS exp','exp',3,'p_exp_bin','yapl_parser.py',41),
-  ('exp -> exp MULTIPLICATION exp','exp',3,'p_exp_bin','yapl_parser.py',42),
-  ('exp -> exp DIVISION exp','exp',3,'p_exp_bin','yapl_parser.py',43),
-  ('exp -> exp MODULO exp','exp',3,'p_exp_bin','yapl_parser.py',44),
-  ('exp -> exp POW exp','exp',3,'p_exp_bin','yapl_parser.py',45),
-  ('exp -> exp INCREMENT','exp',2,'p_exp_bin','yapl_parser.py',46),
-  ('exp -> exp DECREMENT','exp',2,'p_exp_bin','yapl_parser.py',47),
-  ('exp -> INT','exp',1,'p_exp_num','yapl_parser.py',54),
+  ('S -> stmt S','S',2,'p_start','yapl_parser.py',14),
+  ('S -> <empty>','S',0,'p_start_empty','yapl_parser.py',21),
+  ('stmt -> PRINT exp SEMICOL','stmt',3,'p_print_stmt','yapl_parser.py',28),
+  ('exp -> exp PLUS exp','exp',3,'p_exp_bin','yapl_parser.py',35),
+  ('exp -> exp MINUS exp','exp',3,'p_exp_bin','yapl_parser.py',36),
+  ('exp -> exp MULTIPLICATION exp','exp',3,'p_exp_bin','yapl_parser.py',37),
+  ('exp -> exp DIVISION exp','exp',3,'p_exp_bin','yapl_parser.py',38),
+  ('exp -> exp MODULO exp','exp',3,'p_exp_bin','yapl_parser.py',39),
+  ('exp -> exp GREATERTHAN exp','exp',3,'p_exp_bin','yapl_parser.py',40),
+  ('exp -> exp LESSTHAN exp','exp',3,'p_exp_bin','yapl_parser.py',41),
+  ('exp -> exp GREATERTHANOREQUALTO exp','exp',3,'p_exp_bin','yapl_parser.py',42),
+  ('exp -> exp LESSTHANOREQUALTO exp','exp',3,'p_exp_bin','yapl_parser.py',43),
+  ('exp -> exp EQUALTO exp','exp',3,'p_exp_bin','yapl_parser.py',44),
+  ('exp -> exp NOTEQUALTO exp','exp',3,'p_exp_bin','yapl_parser.py',45),
+  ('exp -> exp AND exp','exp',3,'p_exp_bin','yapl_parser.py',46),
+  ('exp -> exp OR exp','exp',3,'p_exp_bin','yapl_parser.py',47),
+  ('exp -> exp POW exp','exp',3,'p_exp_bin','yapl_parser.py',48),
+  ('exp -> exp INCREMENT','exp',2,'p_exp_bin','yapl_parser.py',49),
+  ('exp -> exp DECREMENT','exp',2,'p_exp_bin','yapl_parser.py',50),
+  ('exp -> exp NOT','exp',2,'p_exp_bin','yapl_parser.py',51),
+  ('exp -> STRING','exp',1,'p_exp_bin','yapl_parser.py',52),
+  ('exp -> INT','exp',1,'p_exp_num','yapl_parser.py',69),
+  ('exp -> MINUS exp','exp',2,'p_exp_uminus','yapl_parser.py',74),
 ]

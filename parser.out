@@ -4,9 +4,18 @@ Unused terminals:
 
     BOOL
     CHAR
+    COMMENT
+    DEF
+    DOWHILE
+    ELSE
+    ELSEIF
     FLOAT
+    IF
+    LCURLY
+    LPAREN
     NAME
-    STRING
+    RCURLY
+    RPAREN
 
 Grammar
 
@@ -19,35 +28,65 @@ Rule 5     exp -> exp MINUS exp
 Rule 6     exp -> exp MULTIPLICATION exp
 Rule 7     exp -> exp DIVISION exp
 Rule 8     exp -> exp MODULO exp
-Rule 9     exp -> exp POW exp
-Rule 10    exp -> exp INCREMENT
-Rule 11    exp -> exp DECREMENT
-Rule 12    exp -> INT
+Rule 9     exp -> exp GREATERTHAN exp
+Rule 10    exp -> exp LESSTHAN exp
+Rule 11    exp -> exp GREATERTHANOREQUALTO exp
+Rule 12    exp -> exp LESSTHANOREQUALTO exp
+Rule 13    exp -> exp EQUALTO exp
+Rule 14    exp -> exp NOTEQUALTO exp
+Rule 15    exp -> exp AND exp
+Rule 16    exp -> exp OR exp
+Rule 17    exp -> exp POW exp
+Rule 18    exp -> exp INCREMENT
+Rule 19    exp -> exp DECREMENT
+Rule 20    exp -> exp NOT
+Rule 21    exp -> STRING
+Rule 22    exp -> INT
+Rule 23    exp -> MINUS exp
 
 Terminals, with rules where they appear
 
+AND                  : 15
 BOOL                 : 
 CHAR                 : 
-DECREMENT            : 11
+COMMENT              : 
+DECREMENT            : 19
+DEF                  : 
 DIVISION             : 7
+DOWHILE              : 
+ELSE                 : 
+ELSEIF               : 
+EQUALTO              : 13
 FLOAT                : 
-INCREMENT            : 10
-INT                  : 12
-MINUS                : 5
+GREATERTHAN          : 9
+GREATERTHANOREQUALTO : 11
+IF                   : 
+INCREMENT            : 18
+INT                  : 22
+LCURLY               : 
+LESSTHAN             : 10
+LESSTHANOREQUALTO    : 12
+LPAREN               : 
+MINUS                : 5 23
 MODULO               : 8
 MULTIPLICATION       : 6
 NAME                 : 
+NOT                  : 20
+NOTEQUALTO           : 14
+OR                   : 16
 PLUS                 : 4
-POW                  : 9
+POW                  : 17
 PRINT                : 3
+RCURLY               : 
+RPAREN               : 
 SEMICOL              : 3
-STRING               : 
+STRING               : 21
 error                : 
 
 Nonterminals, with rules where they appear
 
 S                    : 1 0
-exp                  : 3 4 4 5 5 6 6 7 7 8 8 9 9 10 11
+exp                  : 3 4 4 5 5 6 6 7 7 8 8 9 9 10 10 11 11 12 12 13 13 14 14 15 15 16 16 17 17 18 19 20 23
 stmt                 : 1
 
 Parsing method: LALR
@@ -92,12 +131,25 @@ state 3
     (6) exp -> . exp MULTIPLICATION exp
     (7) exp -> . exp DIVISION exp
     (8) exp -> . exp MODULO exp
-    (9) exp -> . exp POW exp
-    (10) exp -> . exp INCREMENT
-    (11) exp -> . exp DECREMENT
-    (12) exp -> . INT
+    (9) exp -> . exp GREATERTHAN exp
+    (10) exp -> . exp LESSTHAN exp
+    (11) exp -> . exp GREATERTHANOREQUALTO exp
+    (12) exp -> . exp LESSTHANOREQUALTO exp
+    (13) exp -> . exp EQUALTO exp
+    (14) exp -> . exp NOTEQUALTO exp
+    (15) exp -> . exp AND exp
+    (16) exp -> . exp OR exp
+    (17) exp -> . exp POW exp
+    (18) exp -> . exp INCREMENT
+    (19) exp -> . exp DECREMENT
+    (20) exp -> . exp NOT
+    (21) exp -> . STRING
+    (22) exp -> . INT
+    (23) exp -> . MINUS exp
 
-    INT             shift and go to state 6
+    STRING          shift and go to state 7
+    INT             shift and go to state 8
+    MINUS           shift and go to state 6
 
     exp                            shift and go to state 5
 
@@ -116,37 +168,118 @@ state 5
     (6) exp -> exp . MULTIPLICATION exp
     (7) exp -> exp . DIVISION exp
     (8) exp -> exp . MODULO exp
-    (9) exp -> exp . POW exp
-    (10) exp -> exp . INCREMENT
-    (11) exp -> exp . DECREMENT
+    (9) exp -> exp . GREATERTHAN exp
+    (10) exp -> exp . LESSTHAN exp
+    (11) exp -> exp . GREATERTHANOREQUALTO exp
+    (12) exp -> exp . LESSTHANOREQUALTO exp
+    (13) exp -> exp . EQUALTO exp
+    (14) exp -> exp . NOTEQUALTO exp
+    (15) exp -> exp . AND exp
+    (16) exp -> exp . OR exp
+    (17) exp -> exp . POW exp
+    (18) exp -> exp . INCREMENT
+    (19) exp -> exp . DECREMENT
+    (20) exp -> exp . NOT
 
-    SEMICOL         shift and go to state 7
-    PLUS            shift and go to state 8
-    MINUS           shift and go to state 9
-    MULTIPLICATION  shift and go to state 10
-    DIVISION        shift and go to state 11
-    MODULO          shift and go to state 12
-    POW             shift and go to state 13
-    INCREMENT       shift and go to state 14
-    DECREMENT       shift and go to state 15
+    SEMICOL         shift and go to state 9
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    MULTIPLICATION  shift and go to state 12
+    DIVISION        shift and go to state 13
+    MODULO          shift and go to state 14
+    GREATERTHAN     shift and go to state 15
+    LESSTHAN        shift and go to state 16
+    GREATERTHANOREQUALTO shift and go to state 17
+    LESSTHANOREQUALTO shift and go to state 18
+    EQUALTO         shift and go to state 19
+    NOTEQUALTO      shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    POW             shift and go to state 23
+    INCREMENT       shift and go to state 24
+    DECREMENT       shift and go to state 25
+    NOT             shift and go to state 26
 
 
 state 6
 
-    (12) exp -> INT .
+    (23) exp -> MINUS . exp
+    (4) exp -> . exp PLUS exp
+    (5) exp -> . exp MINUS exp
+    (6) exp -> . exp MULTIPLICATION exp
+    (7) exp -> . exp DIVISION exp
+    (8) exp -> . exp MODULO exp
+    (9) exp -> . exp GREATERTHAN exp
+    (10) exp -> . exp LESSTHAN exp
+    (11) exp -> . exp GREATERTHANOREQUALTO exp
+    (12) exp -> . exp LESSTHANOREQUALTO exp
+    (13) exp -> . exp EQUALTO exp
+    (14) exp -> . exp NOTEQUALTO exp
+    (15) exp -> . exp AND exp
+    (16) exp -> . exp OR exp
+    (17) exp -> . exp POW exp
+    (18) exp -> . exp INCREMENT
+    (19) exp -> . exp DECREMENT
+    (20) exp -> . exp NOT
+    (21) exp -> . STRING
+    (22) exp -> . INT
+    (23) exp -> . MINUS exp
 
-    SEMICOL         reduce using rule 12 (exp -> INT .)
-    PLUS            reduce using rule 12 (exp -> INT .)
-    MINUS           reduce using rule 12 (exp -> INT .)
-    MULTIPLICATION  reduce using rule 12 (exp -> INT .)
-    DIVISION        reduce using rule 12 (exp -> INT .)
-    MODULO          reduce using rule 12 (exp -> INT .)
-    POW             reduce using rule 12 (exp -> INT .)
-    INCREMENT       reduce using rule 12 (exp -> INT .)
-    DECREMENT       reduce using rule 12 (exp -> INT .)
+    STRING          shift and go to state 7
+    INT             shift and go to state 8
+    MINUS           shift and go to state 6
 
+    exp                            shift and go to state 27
 
 state 7
+
+    (21) exp -> STRING .
+
+    SEMICOL         reduce using rule 21 (exp -> STRING .)
+    PLUS            reduce using rule 21 (exp -> STRING .)
+    MINUS           reduce using rule 21 (exp -> STRING .)
+    MULTIPLICATION  reduce using rule 21 (exp -> STRING .)
+    DIVISION        reduce using rule 21 (exp -> STRING .)
+    MODULO          reduce using rule 21 (exp -> STRING .)
+    GREATERTHAN     reduce using rule 21 (exp -> STRING .)
+    LESSTHAN        reduce using rule 21 (exp -> STRING .)
+    GREATERTHANOREQUALTO reduce using rule 21 (exp -> STRING .)
+    LESSTHANOREQUALTO reduce using rule 21 (exp -> STRING .)
+    EQUALTO         reduce using rule 21 (exp -> STRING .)
+    NOTEQUALTO      reduce using rule 21 (exp -> STRING .)
+    AND             reduce using rule 21 (exp -> STRING .)
+    OR              reduce using rule 21 (exp -> STRING .)
+    POW             reduce using rule 21 (exp -> STRING .)
+    INCREMENT       reduce using rule 21 (exp -> STRING .)
+    DECREMENT       reduce using rule 21 (exp -> STRING .)
+    NOT             reduce using rule 21 (exp -> STRING .)
+
+
+state 8
+
+    (22) exp -> INT .
+
+    SEMICOL         reduce using rule 22 (exp -> INT .)
+    PLUS            reduce using rule 22 (exp -> INT .)
+    MINUS           reduce using rule 22 (exp -> INT .)
+    MULTIPLICATION  reduce using rule 22 (exp -> INT .)
+    DIVISION        reduce using rule 22 (exp -> INT .)
+    MODULO          reduce using rule 22 (exp -> INT .)
+    GREATERTHAN     reduce using rule 22 (exp -> INT .)
+    LESSTHAN        reduce using rule 22 (exp -> INT .)
+    GREATERTHANOREQUALTO reduce using rule 22 (exp -> INT .)
+    LESSTHANOREQUALTO reduce using rule 22 (exp -> INT .)
+    EQUALTO         reduce using rule 22 (exp -> INT .)
+    NOTEQUALTO      reduce using rule 22 (exp -> INT .)
+    AND             reduce using rule 22 (exp -> INT .)
+    OR              reduce using rule 22 (exp -> INT .)
+    POW             reduce using rule 22 (exp -> INT .)
+    INCREMENT       reduce using rule 22 (exp -> INT .)
+    DECREMENT       reduce using rule 22 (exp -> INT .)
+    NOT             reduce using rule 22 (exp -> INT .)
+
+
+state 9
 
     (3) stmt -> PRINT exp SEMICOL .
 
@@ -154,7 +287,7 @@ state 7
     $end            reduce using rule 3 (stmt -> PRINT exp SEMICOL .)
 
 
-state 8
+state 10
 
     (4) exp -> exp PLUS . exp
     (4) exp -> . exp PLUS exp
@@ -162,16 +295,29 @@ state 8
     (6) exp -> . exp MULTIPLICATION exp
     (7) exp -> . exp DIVISION exp
     (8) exp -> . exp MODULO exp
-    (9) exp -> . exp POW exp
-    (10) exp -> . exp INCREMENT
-    (11) exp -> . exp DECREMENT
-    (12) exp -> . INT
+    (9) exp -> . exp GREATERTHAN exp
+    (10) exp -> . exp LESSTHAN exp
+    (11) exp -> . exp GREATERTHANOREQUALTO exp
+    (12) exp -> . exp LESSTHANOREQUALTO exp
+    (13) exp -> . exp EQUALTO exp
+    (14) exp -> . exp NOTEQUALTO exp
+    (15) exp -> . exp AND exp
+    (16) exp -> . exp OR exp
+    (17) exp -> . exp POW exp
+    (18) exp -> . exp INCREMENT
+    (19) exp -> . exp DECREMENT
+    (20) exp -> . exp NOT
+    (21) exp -> . STRING
+    (22) exp -> . INT
+    (23) exp -> . MINUS exp
 
-    INT             shift and go to state 6
+    STRING          shift and go to state 7
+    INT             shift and go to state 8
+    MINUS           shift and go to state 6
 
-    exp                            shift and go to state 16
+    exp                            shift and go to state 28
 
-state 9
+state 11
 
     (5) exp -> exp MINUS . exp
     (4) exp -> . exp PLUS exp
@@ -179,16 +325,29 @@ state 9
     (6) exp -> . exp MULTIPLICATION exp
     (7) exp -> . exp DIVISION exp
     (8) exp -> . exp MODULO exp
-    (9) exp -> . exp POW exp
-    (10) exp -> . exp INCREMENT
-    (11) exp -> . exp DECREMENT
-    (12) exp -> . INT
+    (9) exp -> . exp GREATERTHAN exp
+    (10) exp -> . exp LESSTHAN exp
+    (11) exp -> . exp GREATERTHANOREQUALTO exp
+    (12) exp -> . exp LESSTHANOREQUALTO exp
+    (13) exp -> . exp EQUALTO exp
+    (14) exp -> . exp NOTEQUALTO exp
+    (15) exp -> . exp AND exp
+    (16) exp -> . exp OR exp
+    (17) exp -> . exp POW exp
+    (18) exp -> . exp INCREMENT
+    (19) exp -> . exp DECREMENT
+    (20) exp -> . exp NOT
+    (21) exp -> . STRING
+    (22) exp -> . INT
+    (23) exp -> . MINUS exp
 
-    INT             shift and go to state 6
+    STRING          shift and go to state 7
+    INT             shift and go to state 8
+    MINUS           shift and go to state 6
 
-    exp                            shift and go to state 17
+    exp                            shift and go to state 29
 
-state 10
+state 12
 
     (6) exp -> exp MULTIPLICATION . exp
     (4) exp -> . exp PLUS exp
@@ -196,16 +355,29 @@ state 10
     (6) exp -> . exp MULTIPLICATION exp
     (7) exp -> . exp DIVISION exp
     (8) exp -> . exp MODULO exp
-    (9) exp -> . exp POW exp
-    (10) exp -> . exp INCREMENT
-    (11) exp -> . exp DECREMENT
-    (12) exp -> . INT
+    (9) exp -> . exp GREATERTHAN exp
+    (10) exp -> . exp LESSTHAN exp
+    (11) exp -> . exp GREATERTHANOREQUALTO exp
+    (12) exp -> . exp LESSTHANOREQUALTO exp
+    (13) exp -> . exp EQUALTO exp
+    (14) exp -> . exp NOTEQUALTO exp
+    (15) exp -> . exp AND exp
+    (16) exp -> . exp OR exp
+    (17) exp -> . exp POW exp
+    (18) exp -> . exp INCREMENT
+    (19) exp -> . exp DECREMENT
+    (20) exp -> . exp NOT
+    (21) exp -> . STRING
+    (22) exp -> . INT
+    (23) exp -> . MINUS exp
 
-    INT             shift and go to state 6
+    STRING          shift and go to state 7
+    INT             shift and go to state 8
+    MINUS           shift and go to state 6
 
-    exp                            shift and go to state 18
+    exp                            shift and go to state 30
 
-state 11
+state 13
 
     (7) exp -> exp DIVISION . exp
     (4) exp -> . exp PLUS exp
@@ -213,16 +385,29 @@ state 11
     (6) exp -> . exp MULTIPLICATION exp
     (7) exp -> . exp DIVISION exp
     (8) exp -> . exp MODULO exp
-    (9) exp -> . exp POW exp
-    (10) exp -> . exp INCREMENT
-    (11) exp -> . exp DECREMENT
-    (12) exp -> . INT
+    (9) exp -> . exp GREATERTHAN exp
+    (10) exp -> . exp LESSTHAN exp
+    (11) exp -> . exp GREATERTHANOREQUALTO exp
+    (12) exp -> . exp LESSTHANOREQUALTO exp
+    (13) exp -> . exp EQUALTO exp
+    (14) exp -> . exp NOTEQUALTO exp
+    (15) exp -> . exp AND exp
+    (16) exp -> . exp OR exp
+    (17) exp -> . exp POW exp
+    (18) exp -> . exp INCREMENT
+    (19) exp -> . exp DECREMENT
+    (20) exp -> . exp NOT
+    (21) exp -> . STRING
+    (22) exp -> . INT
+    (23) exp -> . MINUS exp
 
-    INT             shift and go to state 6
+    STRING          shift and go to state 7
+    INT             shift and go to state 8
+    MINUS           shift and go to state 6
 
-    exp                            shift and go to state 19
+    exp                            shift and go to state 31
 
-state 12
+state 14
 
     (8) exp -> exp MODULO . exp
     (4) exp -> . exp PLUS exp
@@ -230,63 +415,430 @@ state 12
     (6) exp -> . exp MULTIPLICATION exp
     (7) exp -> . exp DIVISION exp
     (8) exp -> . exp MODULO exp
-    (9) exp -> . exp POW exp
-    (10) exp -> . exp INCREMENT
-    (11) exp -> . exp DECREMENT
-    (12) exp -> . INT
+    (9) exp -> . exp GREATERTHAN exp
+    (10) exp -> . exp LESSTHAN exp
+    (11) exp -> . exp GREATERTHANOREQUALTO exp
+    (12) exp -> . exp LESSTHANOREQUALTO exp
+    (13) exp -> . exp EQUALTO exp
+    (14) exp -> . exp NOTEQUALTO exp
+    (15) exp -> . exp AND exp
+    (16) exp -> . exp OR exp
+    (17) exp -> . exp POW exp
+    (18) exp -> . exp INCREMENT
+    (19) exp -> . exp DECREMENT
+    (20) exp -> . exp NOT
+    (21) exp -> . STRING
+    (22) exp -> . INT
+    (23) exp -> . MINUS exp
 
-    INT             shift and go to state 6
+    STRING          shift and go to state 7
+    INT             shift and go to state 8
+    MINUS           shift and go to state 6
 
-    exp                            shift and go to state 20
+    exp                            shift and go to state 32
 
-state 13
+state 15
 
-    (9) exp -> exp POW . exp
+    (9) exp -> exp GREATERTHAN . exp
     (4) exp -> . exp PLUS exp
     (5) exp -> . exp MINUS exp
     (6) exp -> . exp MULTIPLICATION exp
     (7) exp -> . exp DIVISION exp
     (8) exp -> . exp MODULO exp
-    (9) exp -> . exp POW exp
-    (10) exp -> . exp INCREMENT
-    (11) exp -> . exp DECREMENT
-    (12) exp -> . INT
+    (9) exp -> . exp GREATERTHAN exp
+    (10) exp -> . exp LESSTHAN exp
+    (11) exp -> . exp GREATERTHANOREQUALTO exp
+    (12) exp -> . exp LESSTHANOREQUALTO exp
+    (13) exp -> . exp EQUALTO exp
+    (14) exp -> . exp NOTEQUALTO exp
+    (15) exp -> . exp AND exp
+    (16) exp -> . exp OR exp
+    (17) exp -> . exp POW exp
+    (18) exp -> . exp INCREMENT
+    (19) exp -> . exp DECREMENT
+    (20) exp -> . exp NOT
+    (21) exp -> . STRING
+    (22) exp -> . INT
+    (23) exp -> . MINUS exp
 
-    INT             shift and go to state 6
+    STRING          shift and go to state 7
+    INT             shift and go to state 8
+    MINUS           shift and go to state 6
 
-    exp                            shift and go to state 21
-
-state 14
-
-    (10) exp -> exp INCREMENT .
-
-    SEMICOL         reduce using rule 10 (exp -> exp INCREMENT .)
-    PLUS            reduce using rule 10 (exp -> exp INCREMENT .)
-    MINUS           reduce using rule 10 (exp -> exp INCREMENT .)
-    MULTIPLICATION  reduce using rule 10 (exp -> exp INCREMENT .)
-    DIVISION        reduce using rule 10 (exp -> exp INCREMENT .)
-    MODULO          reduce using rule 10 (exp -> exp INCREMENT .)
-    POW             reduce using rule 10 (exp -> exp INCREMENT .)
-    INCREMENT       reduce using rule 10 (exp -> exp INCREMENT .)
-    DECREMENT       reduce using rule 10 (exp -> exp INCREMENT .)
-
-
-state 15
-
-    (11) exp -> exp DECREMENT .
-
-    SEMICOL         reduce using rule 11 (exp -> exp DECREMENT .)
-    PLUS            reduce using rule 11 (exp -> exp DECREMENT .)
-    MINUS           reduce using rule 11 (exp -> exp DECREMENT .)
-    MULTIPLICATION  reduce using rule 11 (exp -> exp DECREMENT .)
-    DIVISION        reduce using rule 11 (exp -> exp DECREMENT .)
-    MODULO          reduce using rule 11 (exp -> exp DECREMENT .)
-    POW             reduce using rule 11 (exp -> exp DECREMENT .)
-    INCREMENT       reduce using rule 11 (exp -> exp DECREMENT .)
-    DECREMENT       reduce using rule 11 (exp -> exp DECREMENT .)
-
+    exp                            shift and go to state 33
 
 state 16
+
+    (10) exp -> exp LESSTHAN . exp
+    (4) exp -> . exp PLUS exp
+    (5) exp -> . exp MINUS exp
+    (6) exp -> . exp MULTIPLICATION exp
+    (7) exp -> . exp DIVISION exp
+    (8) exp -> . exp MODULO exp
+    (9) exp -> . exp GREATERTHAN exp
+    (10) exp -> . exp LESSTHAN exp
+    (11) exp -> . exp GREATERTHANOREQUALTO exp
+    (12) exp -> . exp LESSTHANOREQUALTO exp
+    (13) exp -> . exp EQUALTO exp
+    (14) exp -> . exp NOTEQUALTO exp
+    (15) exp -> . exp AND exp
+    (16) exp -> . exp OR exp
+    (17) exp -> . exp POW exp
+    (18) exp -> . exp INCREMENT
+    (19) exp -> . exp DECREMENT
+    (20) exp -> . exp NOT
+    (21) exp -> . STRING
+    (22) exp -> . INT
+    (23) exp -> . MINUS exp
+
+    STRING          shift and go to state 7
+    INT             shift and go to state 8
+    MINUS           shift and go to state 6
+
+    exp                            shift and go to state 34
+
+state 17
+
+    (11) exp -> exp GREATERTHANOREQUALTO . exp
+    (4) exp -> . exp PLUS exp
+    (5) exp -> . exp MINUS exp
+    (6) exp -> . exp MULTIPLICATION exp
+    (7) exp -> . exp DIVISION exp
+    (8) exp -> . exp MODULO exp
+    (9) exp -> . exp GREATERTHAN exp
+    (10) exp -> . exp LESSTHAN exp
+    (11) exp -> . exp GREATERTHANOREQUALTO exp
+    (12) exp -> . exp LESSTHANOREQUALTO exp
+    (13) exp -> . exp EQUALTO exp
+    (14) exp -> . exp NOTEQUALTO exp
+    (15) exp -> . exp AND exp
+    (16) exp -> . exp OR exp
+    (17) exp -> . exp POW exp
+    (18) exp -> . exp INCREMENT
+    (19) exp -> . exp DECREMENT
+    (20) exp -> . exp NOT
+    (21) exp -> . STRING
+    (22) exp -> . INT
+    (23) exp -> . MINUS exp
+
+    STRING          shift and go to state 7
+    INT             shift and go to state 8
+    MINUS           shift and go to state 6
+
+    exp                            shift and go to state 35
+
+state 18
+
+    (12) exp -> exp LESSTHANOREQUALTO . exp
+    (4) exp -> . exp PLUS exp
+    (5) exp -> . exp MINUS exp
+    (6) exp -> . exp MULTIPLICATION exp
+    (7) exp -> . exp DIVISION exp
+    (8) exp -> . exp MODULO exp
+    (9) exp -> . exp GREATERTHAN exp
+    (10) exp -> . exp LESSTHAN exp
+    (11) exp -> . exp GREATERTHANOREQUALTO exp
+    (12) exp -> . exp LESSTHANOREQUALTO exp
+    (13) exp -> . exp EQUALTO exp
+    (14) exp -> . exp NOTEQUALTO exp
+    (15) exp -> . exp AND exp
+    (16) exp -> . exp OR exp
+    (17) exp -> . exp POW exp
+    (18) exp -> . exp INCREMENT
+    (19) exp -> . exp DECREMENT
+    (20) exp -> . exp NOT
+    (21) exp -> . STRING
+    (22) exp -> . INT
+    (23) exp -> . MINUS exp
+
+    STRING          shift and go to state 7
+    INT             shift and go to state 8
+    MINUS           shift and go to state 6
+
+    exp                            shift and go to state 36
+
+state 19
+
+    (13) exp -> exp EQUALTO . exp
+    (4) exp -> . exp PLUS exp
+    (5) exp -> . exp MINUS exp
+    (6) exp -> . exp MULTIPLICATION exp
+    (7) exp -> . exp DIVISION exp
+    (8) exp -> . exp MODULO exp
+    (9) exp -> . exp GREATERTHAN exp
+    (10) exp -> . exp LESSTHAN exp
+    (11) exp -> . exp GREATERTHANOREQUALTO exp
+    (12) exp -> . exp LESSTHANOREQUALTO exp
+    (13) exp -> . exp EQUALTO exp
+    (14) exp -> . exp NOTEQUALTO exp
+    (15) exp -> . exp AND exp
+    (16) exp -> . exp OR exp
+    (17) exp -> . exp POW exp
+    (18) exp -> . exp INCREMENT
+    (19) exp -> . exp DECREMENT
+    (20) exp -> . exp NOT
+    (21) exp -> . STRING
+    (22) exp -> . INT
+    (23) exp -> . MINUS exp
+
+    STRING          shift and go to state 7
+    INT             shift and go to state 8
+    MINUS           shift and go to state 6
+
+    exp                            shift and go to state 37
+
+state 20
+
+    (14) exp -> exp NOTEQUALTO . exp
+    (4) exp -> . exp PLUS exp
+    (5) exp -> . exp MINUS exp
+    (6) exp -> . exp MULTIPLICATION exp
+    (7) exp -> . exp DIVISION exp
+    (8) exp -> . exp MODULO exp
+    (9) exp -> . exp GREATERTHAN exp
+    (10) exp -> . exp LESSTHAN exp
+    (11) exp -> . exp GREATERTHANOREQUALTO exp
+    (12) exp -> . exp LESSTHANOREQUALTO exp
+    (13) exp -> . exp EQUALTO exp
+    (14) exp -> . exp NOTEQUALTO exp
+    (15) exp -> . exp AND exp
+    (16) exp -> . exp OR exp
+    (17) exp -> . exp POW exp
+    (18) exp -> . exp INCREMENT
+    (19) exp -> . exp DECREMENT
+    (20) exp -> . exp NOT
+    (21) exp -> . STRING
+    (22) exp -> . INT
+    (23) exp -> . MINUS exp
+
+    STRING          shift and go to state 7
+    INT             shift and go to state 8
+    MINUS           shift and go to state 6
+
+    exp                            shift and go to state 38
+
+state 21
+
+    (15) exp -> exp AND . exp
+    (4) exp -> . exp PLUS exp
+    (5) exp -> . exp MINUS exp
+    (6) exp -> . exp MULTIPLICATION exp
+    (7) exp -> . exp DIVISION exp
+    (8) exp -> . exp MODULO exp
+    (9) exp -> . exp GREATERTHAN exp
+    (10) exp -> . exp LESSTHAN exp
+    (11) exp -> . exp GREATERTHANOREQUALTO exp
+    (12) exp -> . exp LESSTHANOREQUALTO exp
+    (13) exp -> . exp EQUALTO exp
+    (14) exp -> . exp NOTEQUALTO exp
+    (15) exp -> . exp AND exp
+    (16) exp -> . exp OR exp
+    (17) exp -> . exp POW exp
+    (18) exp -> . exp INCREMENT
+    (19) exp -> . exp DECREMENT
+    (20) exp -> . exp NOT
+    (21) exp -> . STRING
+    (22) exp -> . INT
+    (23) exp -> . MINUS exp
+
+    STRING          shift and go to state 7
+    INT             shift and go to state 8
+    MINUS           shift and go to state 6
+
+    exp                            shift and go to state 39
+
+state 22
+
+    (16) exp -> exp OR . exp
+    (4) exp -> . exp PLUS exp
+    (5) exp -> . exp MINUS exp
+    (6) exp -> . exp MULTIPLICATION exp
+    (7) exp -> . exp DIVISION exp
+    (8) exp -> . exp MODULO exp
+    (9) exp -> . exp GREATERTHAN exp
+    (10) exp -> . exp LESSTHAN exp
+    (11) exp -> . exp GREATERTHANOREQUALTO exp
+    (12) exp -> . exp LESSTHANOREQUALTO exp
+    (13) exp -> . exp EQUALTO exp
+    (14) exp -> . exp NOTEQUALTO exp
+    (15) exp -> . exp AND exp
+    (16) exp -> . exp OR exp
+    (17) exp -> . exp POW exp
+    (18) exp -> . exp INCREMENT
+    (19) exp -> . exp DECREMENT
+    (20) exp -> . exp NOT
+    (21) exp -> . STRING
+    (22) exp -> . INT
+    (23) exp -> . MINUS exp
+
+    STRING          shift and go to state 7
+    INT             shift and go to state 8
+    MINUS           shift and go to state 6
+
+    exp                            shift and go to state 40
+
+state 23
+
+    (17) exp -> exp POW . exp
+    (4) exp -> . exp PLUS exp
+    (5) exp -> . exp MINUS exp
+    (6) exp -> . exp MULTIPLICATION exp
+    (7) exp -> . exp DIVISION exp
+    (8) exp -> . exp MODULO exp
+    (9) exp -> . exp GREATERTHAN exp
+    (10) exp -> . exp LESSTHAN exp
+    (11) exp -> . exp GREATERTHANOREQUALTO exp
+    (12) exp -> . exp LESSTHANOREQUALTO exp
+    (13) exp -> . exp EQUALTO exp
+    (14) exp -> . exp NOTEQUALTO exp
+    (15) exp -> . exp AND exp
+    (16) exp -> . exp OR exp
+    (17) exp -> . exp POW exp
+    (18) exp -> . exp INCREMENT
+    (19) exp -> . exp DECREMENT
+    (20) exp -> . exp NOT
+    (21) exp -> . STRING
+    (22) exp -> . INT
+    (23) exp -> . MINUS exp
+
+    STRING          shift and go to state 7
+    INT             shift and go to state 8
+    MINUS           shift and go to state 6
+
+    exp                            shift and go to state 41
+
+state 24
+
+    (18) exp -> exp INCREMENT .
+
+    SEMICOL         reduce using rule 18 (exp -> exp INCREMENT .)
+    PLUS            reduce using rule 18 (exp -> exp INCREMENT .)
+    MINUS           reduce using rule 18 (exp -> exp INCREMENT .)
+    MULTIPLICATION  reduce using rule 18 (exp -> exp INCREMENT .)
+    DIVISION        reduce using rule 18 (exp -> exp INCREMENT .)
+    MODULO          reduce using rule 18 (exp -> exp INCREMENT .)
+    GREATERTHAN     reduce using rule 18 (exp -> exp INCREMENT .)
+    LESSTHAN        reduce using rule 18 (exp -> exp INCREMENT .)
+    GREATERTHANOREQUALTO reduce using rule 18 (exp -> exp INCREMENT .)
+    LESSTHANOREQUALTO reduce using rule 18 (exp -> exp INCREMENT .)
+    EQUALTO         reduce using rule 18 (exp -> exp INCREMENT .)
+    NOTEQUALTO      reduce using rule 18 (exp -> exp INCREMENT .)
+    AND             reduce using rule 18 (exp -> exp INCREMENT .)
+    OR              reduce using rule 18 (exp -> exp INCREMENT .)
+    POW             reduce using rule 18 (exp -> exp INCREMENT .)
+    INCREMENT       reduce using rule 18 (exp -> exp INCREMENT .)
+    DECREMENT       reduce using rule 18 (exp -> exp INCREMENT .)
+    NOT             reduce using rule 18 (exp -> exp INCREMENT .)
+
+
+state 25
+
+    (19) exp -> exp DECREMENT .
+
+    SEMICOL         reduce using rule 19 (exp -> exp DECREMENT .)
+    PLUS            reduce using rule 19 (exp -> exp DECREMENT .)
+    MINUS           reduce using rule 19 (exp -> exp DECREMENT .)
+    MULTIPLICATION  reduce using rule 19 (exp -> exp DECREMENT .)
+    DIVISION        reduce using rule 19 (exp -> exp DECREMENT .)
+    MODULO          reduce using rule 19 (exp -> exp DECREMENT .)
+    GREATERTHAN     reduce using rule 19 (exp -> exp DECREMENT .)
+    LESSTHAN        reduce using rule 19 (exp -> exp DECREMENT .)
+    GREATERTHANOREQUALTO reduce using rule 19 (exp -> exp DECREMENT .)
+    LESSTHANOREQUALTO reduce using rule 19 (exp -> exp DECREMENT .)
+    EQUALTO         reduce using rule 19 (exp -> exp DECREMENT .)
+    NOTEQUALTO      reduce using rule 19 (exp -> exp DECREMENT .)
+    AND             reduce using rule 19 (exp -> exp DECREMENT .)
+    OR              reduce using rule 19 (exp -> exp DECREMENT .)
+    POW             reduce using rule 19 (exp -> exp DECREMENT .)
+    INCREMENT       reduce using rule 19 (exp -> exp DECREMENT .)
+    DECREMENT       reduce using rule 19 (exp -> exp DECREMENT .)
+    NOT             reduce using rule 19 (exp -> exp DECREMENT .)
+
+
+state 26
+
+    (20) exp -> exp NOT .
+
+    SEMICOL         reduce using rule 20 (exp -> exp NOT .)
+    PLUS            reduce using rule 20 (exp -> exp NOT .)
+    MINUS           reduce using rule 20 (exp -> exp NOT .)
+    MULTIPLICATION  reduce using rule 20 (exp -> exp NOT .)
+    DIVISION        reduce using rule 20 (exp -> exp NOT .)
+    MODULO          reduce using rule 20 (exp -> exp NOT .)
+    GREATERTHAN     reduce using rule 20 (exp -> exp NOT .)
+    LESSTHAN        reduce using rule 20 (exp -> exp NOT .)
+    GREATERTHANOREQUALTO reduce using rule 20 (exp -> exp NOT .)
+    LESSTHANOREQUALTO reduce using rule 20 (exp -> exp NOT .)
+    EQUALTO         reduce using rule 20 (exp -> exp NOT .)
+    NOTEQUALTO      reduce using rule 20 (exp -> exp NOT .)
+    AND             reduce using rule 20 (exp -> exp NOT .)
+    OR              reduce using rule 20 (exp -> exp NOT .)
+    POW             reduce using rule 20 (exp -> exp NOT .)
+    INCREMENT       reduce using rule 20 (exp -> exp NOT .)
+    DECREMENT       reduce using rule 20 (exp -> exp NOT .)
+    NOT             reduce using rule 20 (exp -> exp NOT .)
+
+
+state 27
+
+    (23) exp -> MINUS exp .
+    (4) exp -> exp . PLUS exp
+    (5) exp -> exp . MINUS exp
+    (6) exp -> exp . MULTIPLICATION exp
+    (7) exp -> exp . DIVISION exp
+    (8) exp -> exp . MODULO exp
+    (9) exp -> exp . GREATERTHAN exp
+    (10) exp -> exp . LESSTHAN exp
+    (11) exp -> exp . GREATERTHANOREQUALTO exp
+    (12) exp -> exp . LESSTHANOREQUALTO exp
+    (13) exp -> exp . EQUALTO exp
+    (14) exp -> exp . NOTEQUALTO exp
+    (15) exp -> exp . AND exp
+    (16) exp -> exp . OR exp
+    (17) exp -> exp . POW exp
+    (18) exp -> exp . INCREMENT
+    (19) exp -> exp . DECREMENT
+    (20) exp -> exp . NOT
+
+    SEMICOL         reduce using rule 23 (exp -> MINUS exp .)
+    PLUS            reduce using rule 23 (exp -> MINUS exp .)
+    MINUS           reduce using rule 23 (exp -> MINUS exp .)
+    MULTIPLICATION  reduce using rule 23 (exp -> MINUS exp .)
+    DIVISION        reduce using rule 23 (exp -> MINUS exp .)
+    MODULO          reduce using rule 23 (exp -> MINUS exp .)
+    GREATERTHAN     reduce using rule 23 (exp -> MINUS exp .)
+    LESSTHAN        reduce using rule 23 (exp -> MINUS exp .)
+    GREATERTHANOREQUALTO reduce using rule 23 (exp -> MINUS exp .)
+    LESSTHANOREQUALTO reduce using rule 23 (exp -> MINUS exp .)
+    EQUALTO         reduce using rule 23 (exp -> MINUS exp .)
+    NOTEQUALTO      reduce using rule 23 (exp -> MINUS exp .)
+    AND             reduce using rule 23 (exp -> MINUS exp .)
+    OR              reduce using rule 23 (exp -> MINUS exp .)
+    POW             reduce using rule 23 (exp -> MINUS exp .)
+    INCREMENT       reduce using rule 23 (exp -> MINUS exp .)
+    DECREMENT       reduce using rule 23 (exp -> MINUS exp .)
+    NOT             reduce using rule 23 (exp -> MINUS exp .)
+
+  ! PLUS            [ shift and go to state 10 ]
+  ! MINUS           [ shift and go to state 11 ]
+  ! MULTIPLICATION  [ shift and go to state 12 ]
+  ! DIVISION        [ shift and go to state 13 ]
+  ! MODULO          [ shift and go to state 14 ]
+  ! GREATERTHAN     [ shift and go to state 15 ]
+  ! LESSTHAN        [ shift and go to state 16 ]
+  ! GREATERTHANOREQUALTO [ shift and go to state 17 ]
+  ! LESSTHANOREQUALTO [ shift and go to state 18 ]
+  ! EQUALTO         [ shift and go to state 19 ]
+  ! NOTEQUALTO      [ shift and go to state 20 ]
+  ! AND             [ shift and go to state 21 ]
+  ! OR              [ shift and go to state 22 ]
+  ! POW             [ shift and go to state 23 ]
+  ! INCREMENT       [ shift and go to state 24 ]
+  ! DECREMENT       [ shift and go to state 25 ]
+  ! NOT             [ shift and go to state 26 ]
+
+
+state 28
 
     (4) exp -> exp PLUS exp .
     (4) exp -> exp . PLUS exp
@@ -294,31 +846,58 @@ state 16
     (6) exp -> exp . MULTIPLICATION exp
     (7) exp -> exp . DIVISION exp
     (8) exp -> exp . MODULO exp
-    (9) exp -> exp . POW exp
-    (10) exp -> exp . INCREMENT
-    (11) exp -> exp . DECREMENT
+    (9) exp -> exp . GREATERTHAN exp
+    (10) exp -> exp . LESSTHAN exp
+    (11) exp -> exp . GREATERTHANOREQUALTO exp
+    (12) exp -> exp . LESSTHANOREQUALTO exp
+    (13) exp -> exp . EQUALTO exp
+    (14) exp -> exp . NOTEQUALTO exp
+    (15) exp -> exp . AND exp
+    (16) exp -> exp . OR exp
+    (17) exp -> exp . POW exp
+    (18) exp -> exp . INCREMENT
+    (19) exp -> exp . DECREMENT
+    (20) exp -> exp . NOT
 
     SEMICOL         reduce using rule 4 (exp -> exp PLUS exp .)
-    PLUS            shift and go to state 8
-    MINUS           shift and go to state 9
-    MULTIPLICATION  shift and go to state 10
-    DIVISION        shift and go to state 11
-    MODULO          shift and go to state 12
-    POW             shift and go to state 13
-    INCREMENT       shift and go to state 14
-    DECREMENT       shift and go to state 15
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    MULTIPLICATION  shift and go to state 12
+    DIVISION        shift and go to state 13
+    MODULO          shift and go to state 14
+    GREATERTHAN     shift and go to state 15
+    LESSTHAN        shift and go to state 16
+    GREATERTHANOREQUALTO shift and go to state 17
+    LESSTHANOREQUALTO shift and go to state 18
+    EQUALTO         shift and go to state 19
+    NOTEQUALTO      shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    POW             shift and go to state 23
+    INCREMENT       shift and go to state 24
+    DECREMENT       shift and go to state 25
+    NOT             shift and go to state 26
 
   ! PLUS            [ reduce using rule 4 (exp -> exp PLUS exp .) ]
   ! MINUS           [ reduce using rule 4 (exp -> exp PLUS exp .) ]
   ! MULTIPLICATION  [ reduce using rule 4 (exp -> exp PLUS exp .) ]
   ! DIVISION        [ reduce using rule 4 (exp -> exp PLUS exp .) ]
   ! MODULO          [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+  ! GREATERTHAN     [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+  ! LESSTHAN        [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+  ! GREATERTHANOREQUALTO [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+  ! LESSTHANOREQUALTO [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+  ! EQUALTO         [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+  ! NOTEQUALTO      [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+  ! AND             [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+  ! OR              [ reduce using rule 4 (exp -> exp PLUS exp .) ]
   ! POW             [ reduce using rule 4 (exp -> exp PLUS exp .) ]
   ! INCREMENT       [ reduce using rule 4 (exp -> exp PLUS exp .) ]
   ! DECREMENT       [ reduce using rule 4 (exp -> exp PLUS exp .) ]
+  ! NOT             [ reduce using rule 4 (exp -> exp PLUS exp .) ]
 
 
-state 17
+state 29
 
     (5) exp -> exp MINUS exp .
     (4) exp -> exp . PLUS exp
@@ -326,31 +905,58 @@ state 17
     (6) exp -> exp . MULTIPLICATION exp
     (7) exp -> exp . DIVISION exp
     (8) exp -> exp . MODULO exp
-    (9) exp -> exp . POW exp
-    (10) exp -> exp . INCREMENT
-    (11) exp -> exp . DECREMENT
+    (9) exp -> exp . GREATERTHAN exp
+    (10) exp -> exp . LESSTHAN exp
+    (11) exp -> exp . GREATERTHANOREQUALTO exp
+    (12) exp -> exp . LESSTHANOREQUALTO exp
+    (13) exp -> exp . EQUALTO exp
+    (14) exp -> exp . NOTEQUALTO exp
+    (15) exp -> exp . AND exp
+    (16) exp -> exp . OR exp
+    (17) exp -> exp . POW exp
+    (18) exp -> exp . INCREMENT
+    (19) exp -> exp . DECREMENT
+    (20) exp -> exp . NOT
 
     SEMICOL         reduce using rule 5 (exp -> exp MINUS exp .)
-    PLUS            shift and go to state 8
-    MINUS           shift and go to state 9
-    MULTIPLICATION  shift and go to state 10
-    DIVISION        shift and go to state 11
-    MODULO          shift and go to state 12
-    POW             shift and go to state 13
-    INCREMENT       shift and go to state 14
-    DECREMENT       shift and go to state 15
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    MULTIPLICATION  shift and go to state 12
+    DIVISION        shift and go to state 13
+    MODULO          shift and go to state 14
+    GREATERTHAN     shift and go to state 15
+    LESSTHAN        shift and go to state 16
+    GREATERTHANOREQUALTO shift and go to state 17
+    LESSTHANOREQUALTO shift and go to state 18
+    EQUALTO         shift and go to state 19
+    NOTEQUALTO      shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    POW             shift and go to state 23
+    INCREMENT       shift and go to state 24
+    DECREMENT       shift and go to state 25
+    NOT             shift and go to state 26
 
   ! PLUS            [ reduce using rule 5 (exp -> exp MINUS exp .) ]
   ! MINUS           [ reduce using rule 5 (exp -> exp MINUS exp .) ]
   ! MULTIPLICATION  [ reduce using rule 5 (exp -> exp MINUS exp .) ]
   ! DIVISION        [ reduce using rule 5 (exp -> exp MINUS exp .) ]
   ! MODULO          [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+  ! GREATERTHAN     [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+  ! LESSTHAN        [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+  ! GREATERTHANOREQUALTO [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+  ! LESSTHANOREQUALTO [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+  ! EQUALTO         [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+  ! NOTEQUALTO      [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+  ! AND             [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+  ! OR              [ reduce using rule 5 (exp -> exp MINUS exp .) ]
   ! POW             [ reduce using rule 5 (exp -> exp MINUS exp .) ]
   ! INCREMENT       [ reduce using rule 5 (exp -> exp MINUS exp .) ]
   ! DECREMENT       [ reduce using rule 5 (exp -> exp MINUS exp .) ]
+  ! NOT             [ reduce using rule 5 (exp -> exp MINUS exp .) ]
 
 
-state 18
+state 30
 
     (6) exp -> exp MULTIPLICATION exp .
     (4) exp -> exp . PLUS exp
@@ -358,31 +964,58 @@ state 18
     (6) exp -> exp . MULTIPLICATION exp
     (7) exp -> exp . DIVISION exp
     (8) exp -> exp . MODULO exp
-    (9) exp -> exp . POW exp
-    (10) exp -> exp . INCREMENT
-    (11) exp -> exp . DECREMENT
+    (9) exp -> exp . GREATERTHAN exp
+    (10) exp -> exp . LESSTHAN exp
+    (11) exp -> exp . GREATERTHANOREQUALTO exp
+    (12) exp -> exp . LESSTHANOREQUALTO exp
+    (13) exp -> exp . EQUALTO exp
+    (14) exp -> exp . NOTEQUALTO exp
+    (15) exp -> exp . AND exp
+    (16) exp -> exp . OR exp
+    (17) exp -> exp . POW exp
+    (18) exp -> exp . INCREMENT
+    (19) exp -> exp . DECREMENT
+    (20) exp -> exp . NOT
 
     SEMICOL         reduce using rule 6 (exp -> exp MULTIPLICATION exp .)
-    PLUS            shift and go to state 8
-    MINUS           shift and go to state 9
-    MULTIPLICATION  shift and go to state 10
-    DIVISION        shift and go to state 11
-    MODULO          shift and go to state 12
-    POW             shift and go to state 13
-    INCREMENT       shift and go to state 14
-    DECREMENT       shift and go to state 15
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    MULTIPLICATION  shift and go to state 12
+    DIVISION        shift and go to state 13
+    MODULO          shift and go to state 14
+    GREATERTHAN     shift and go to state 15
+    LESSTHAN        shift and go to state 16
+    GREATERTHANOREQUALTO shift and go to state 17
+    LESSTHANOREQUALTO shift and go to state 18
+    EQUALTO         shift and go to state 19
+    NOTEQUALTO      shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    POW             shift and go to state 23
+    INCREMENT       shift and go to state 24
+    DECREMENT       shift and go to state 25
+    NOT             shift and go to state 26
 
   ! PLUS            [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
   ! MINUS           [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
   ! MULTIPLICATION  [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
   ! DIVISION        [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
   ! MODULO          [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+  ! GREATERTHAN     [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+  ! LESSTHAN        [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+  ! GREATERTHANOREQUALTO [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+  ! LESSTHANOREQUALTO [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+  ! EQUALTO         [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+  ! NOTEQUALTO      [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+  ! AND             [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+  ! OR              [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
   ! POW             [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
   ! INCREMENT       [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
   ! DECREMENT       [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
+  ! NOT             [ reduce using rule 6 (exp -> exp MULTIPLICATION exp .) ]
 
 
-state 19
+state 31
 
     (7) exp -> exp DIVISION exp .
     (4) exp -> exp . PLUS exp
@@ -390,31 +1023,58 @@ state 19
     (6) exp -> exp . MULTIPLICATION exp
     (7) exp -> exp . DIVISION exp
     (8) exp -> exp . MODULO exp
-    (9) exp -> exp . POW exp
-    (10) exp -> exp . INCREMENT
-    (11) exp -> exp . DECREMENT
+    (9) exp -> exp . GREATERTHAN exp
+    (10) exp -> exp . LESSTHAN exp
+    (11) exp -> exp . GREATERTHANOREQUALTO exp
+    (12) exp -> exp . LESSTHANOREQUALTO exp
+    (13) exp -> exp . EQUALTO exp
+    (14) exp -> exp . NOTEQUALTO exp
+    (15) exp -> exp . AND exp
+    (16) exp -> exp . OR exp
+    (17) exp -> exp . POW exp
+    (18) exp -> exp . INCREMENT
+    (19) exp -> exp . DECREMENT
+    (20) exp -> exp . NOT
 
     SEMICOL         reduce using rule 7 (exp -> exp DIVISION exp .)
-    PLUS            shift and go to state 8
-    MINUS           shift and go to state 9
-    MULTIPLICATION  shift and go to state 10
-    DIVISION        shift and go to state 11
-    MODULO          shift and go to state 12
-    POW             shift and go to state 13
-    INCREMENT       shift and go to state 14
-    DECREMENT       shift and go to state 15
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    MULTIPLICATION  shift and go to state 12
+    DIVISION        shift and go to state 13
+    MODULO          shift and go to state 14
+    GREATERTHAN     shift and go to state 15
+    LESSTHAN        shift and go to state 16
+    GREATERTHANOREQUALTO shift and go to state 17
+    LESSTHANOREQUALTO shift and go to state 18
+    EQUALTO         shift and go to state 19
+    NOTEQUALTO      shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    POW             shift and go to state 23
+    INCREMENT       shift and go to state 24
+    DECREMENT       shift and go to state 25
+    NOT             shift and go to state 26
 
   ! PLUS            [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
   ! MINUS           [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
   ! MULTIPLICATION  [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
   ! DIVISION        [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
   ! MODULO          [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+  ! GREATERTHAN     [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+  ! LESSTHAN        [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+  ! GREATERTHANOREQUALTO [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+  ! LESSTHANOREQUALTO [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+  ! EQUALTO         [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+  ! NOTEQUALTO      [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+  ! AND             [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+  ! OR              [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
   ! POW             [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
   ! INCREMENT       [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
   ! DECREMENT       [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
+  ! NOT             [ reduce using rule 7 (exp -> exp DIVISION exp .) ]
 
 
-state 20
+state 32
 
     (8) exp -> exp MODULO exp .
     (4) exp -> exp . PLUS exp
@@ -422,58 +1082,584 @@ state 20
     (6) exp -> exp . MULTIPLICATION exp
     (7) exp -> exp . DIVISION exp
     (8) exp -> exp . MODULO exp
-    (9) exp -> exp . POW exp
-    (10) exp -> exp . INCREMENT
-    (11) exp -> exp . DECREMENT
+    (9) exp -> exp . GREATERTHAN exp
+    (10) exp -> exp . LESSTHAN exp
+    (11) exp -> exp . GREATERTHANOREQUALTO exp
+    (12) exp -> exp . LESSTHANOREQUALTO exp
+    (13) exp -> exp . EQUALTO exp
+    (14) exp -> exp . NOTEQUALTO exp
+    (15) exp -> exp . AND exp
+    (16) exp -> exp . OR exp
+    (17) exp -> exp . POW exp
+    (18) exp -> exp . INCREMENT
+    (19) exp -> exp . DECREMENT
+    (20) exp -> exp . NOT
 
     SEMICOL         reduce using rule 8 (exp -> exp MODULO exp .)
-    PLUS            shift and go to state 8
-    MINUS           shift and go to state 9
-    MULTIPLICATION  shift and go to state 10
-    DIVISION        shift and go to state 11
-    MODULO          shift and go to state 12
-    POW             shift and go to state 13
-    INCREMENT       shift and go to state 14
-    DECREMENT       shift and go to state 15
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    MULTIPLICATION  shift and go to state 12
+    DIVISION        shift and go to state 13
+    MODULO          shift and go to state 14
+    GREATERTHAN     shift and go to state 15
+    LESSTHAN        shift and go to state 16
+    GREATERTHANOREQUALTO shift and go to state 17
+    LESSTHANOREQUALTO shift and go to state 18
+    EQUALTO         shift and go to state 19
+    NOTEQUALTO      shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    POW             shift and go to state 23
+    INCREMENT       shift and go to state 24
+    DECREMENT       shift and go to state 25
+    NOT             shift and go to state 26
 
   ! PLUS            [ reduce using rule 8 (exp -> exp MODULO exp .) ]
   ! MINUS           [ reduce using rule 8 (exp -> exp MODULO exp .) ]
   ! MULTIPLICATION  [ reduce using rule 8 (exp -> exp MODULO exp .) ]
   ! DIVISION        [ reduce using rule 8 (exp -> exp MODULO exp .) ]
   ! MODULO          [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+  ! GREATERTHAN     [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+  ! LESSTHAN        [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+  ! GREATERTHANOREQUALTO [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+  ! LESSTHANOREQUALTO [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+  ! EQUALTO         [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+  ! NOTEQUALTO      [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+  ! AND             [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+  ! OR              [ reduce using rule 8 (exp -> exp MODULO exp .) ]
   ! POW             [ reduce using rule 8 (exp -> exp MODULO exp .) ]
   ! INCREMENT       [ reduce using rule 8 (exp -> exp MODULO exp .) ]
   ! DECREMENT       [ reduce using rule 8 (exp -> exp MODULO exp .) ]
+  ! NOT             [ reduce using rule 8 (exp -> exp MODULO exp .) ]
 
 
-state 21
+state 33
 
-    (9) exp -> exp POW exp .
+    (9) exp -> exp GREATERTHAN exp .
     (4) exp -> exp . PLUS exp
     (5) exp -> exp . MINUS exp
     (6) exp -> exp . MULTIPLICATION exp
     (7) exp -> exp . DIVISION exp
     (8) exp -> exp . MODULO exp
-    (9) exp -> exp . POW exp
-    (10) exp -> exp . INCREMENT
-    (11) exp -> exp . DECREMENT
+    (9) exp -> exp . GREATERTHAN exp
+    (10) exp -> exp . LESSTHAN exp
+    (11) exp -> exp . GREATERTHANOREQUALTO exp
+    (12) exp -> exp . LESSTHANOREQUALTO exp
+    (13) exp -> exp . EQUALTO exp
+    (14) exp -> exp . NOTEQUALTO exp
+    (15) exp -> exp . AND exp
+    (16) exp -> exp . OR exp
+    (17) exp -> exp . POW exp
+    (18) exp -> exp . INCREMENT
+    (19) exp -> exp . DECREMENT
+    (20) exp -> exp . NOT
 
-    SEMICOL         reduce using rule 9 (exp -> exp POW exp .)
-    PLUS            shift and go to state 8
-    MINUS           shift and go to state 9
-    MULTIPLICATION  shift and go to state 10
-    DIVISION        shift and go to state 11
-    MODULO          shift and go to state 12
-    POW             shift and go to state 13
-    INCREMENT       shift and go to state 14
-    DECREMENT       shift and go to state 15
+    SEMICOL         reduce using rule 9 (exp -> exp GREATERTHAN exp .)
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    MULTIPLICATION  shift and go to state 12
+    DIVISION        shift and go to state 13
+    MODULO          shift and go to state 14
+    GREATERTHAN     shift and go to state 15
+    LESSTHAN        shift and go to state 16
+    GREATERTHANOREQUALTO shift and go to state 17
+    LESSTHANOREQUALTO shift and go to state 18
+    EQUALTO         shift and go to state 19
+    NOTEQUALTO      shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    POW             shift and go to state 23
+    INCREMENT       shift and go to state 24
+    DECREMENT       shift and go to state 25
+    NOT             shift and go to state 26
 
-  ! PLUS            [ reduce using rule 9 (exp -> exp POW exp .) ]
-  ! MINUS           [ reduce using rule 9 (exp -> exp POW exp .) ]
-  ! MULTIPLICATION  [ reduce using rule 9 (exp -> exp POW exp .) ]
-  ! DIVISION        [ reduce using rule 9 (exp -> exp POW exp .) ]
-  ! MODULO          [ reduce using rule 9 (exp -> exp POW exp .) ]
-  ! POW             [ reduce using rule 9 (exp -> exp POW exp .) ]
-  ! INCREMENT       [ reduce using rule 9 (exp -> exp POW exp .) ]
-  ! DECREMENT       [ reduce using rule 9 (exp -> exp POW exp .) ]
+  ! PLUS            [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+  ! MINUS           [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+  ! MULTIPLICATION  [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+  ! DIVISION        [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+  ! MODULO          [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+  ! GREATERTHAN     [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+  ! LESSTHAN        [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+  ! GREATERTHANOREQUALTO [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+  ! LESSTHANOREQUALTO [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+  ! EQUALTO         [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+  ! NOTEQUALTO      [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+  ! AND             [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+  ! OR              [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+  ! POW             [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+  ! INCREMENT       [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+  ! DECREMENT       [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+  ! NOT             [ reduce using rule 9 (exp -> exp GREATERTHAN exp .) ]
+
+
+state 34
+
+    (10) exp -> exp LESSTHAN exp .
+    (4) exp -> exp . PLUS exp
+    (5) exp -> exp . MINUS exp
+    (6) exp -> exp . MULTIPLICATION exp
+    (7) exp -> exp . DIVISION exp
+    (8) exp -> exp . MODULO exp
+    (9) exp -> exp . GREATERTHAN exp
+    (10) exp -> exp . LESSTHAN exp
+    (11) exp -> exp . GREATERTHANOREQUALTO exp
+    (12) exp -> exp . LESSTHANOREQUALTO exp
+    (13) exp -> exp . EQUALTO exp
+    (14) exp -> exp . NOTEQUALTO exp
+    (15) exp -> exp . AND exp
+    (16) exp -> exp . OR exp
+    (17) exp -> exp . POW exp
+    (18) exp -> exp . INCREMENT
+    (19) exp -> exp . DECREMENT
+    (20) exp -> exp . NOT
+
+    SEMICOL         reduce using rule 10 (exp -> exp LESSTHAN exp .)
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    MULTIPLICATION  shift and go to state 12
+    DIVISION        shift and go to state 13
+    MODULO          shift and go to state 14
+    GREATERTHAN     shift and go to state 15
+    LESSTHAN        shift and go to state 16
+    GREATERTHANOREQUALTO shift and go to state 17
+    LESSTHANOREQUALTO shift and go to state 18
+    EQUALTO         shift and go to state 19
+    NOTEQUALTO      shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    POW             shift and go to state 23
+    INCREMENT       shift and go to state 24
+    DECREMENT       shift and go to state 25
+    NOT             shift and go to state 26
+
+  ! PLUS            [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+  ! MINUS           [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+  ! MULTIPLICATION  [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+  ! DIVISION        [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+  ! MODULO          [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+  ! GREATERTHAN     [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+  ! LESSTHAN        [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+  ! GREATERTHANOREQUALTO [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+  ! LESSTHANOREQUALTO [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+  ! EQUALTO         [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+  ! NOTEQUALTO      [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+  ! AND             [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+  ! OR              [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+  ! POW             [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+  ! INCREMENT       [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+  ! DECREMENT       [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+  ! NOT             [ reduce using rule 10 (exp -> exp LESSTHAN exp .) ]
+
+
+state 35
+
+    (11) exp -> exp GREATERTHANOREQUALTO exp .
+    (4) exp -> exp . PLUS exp
+    (5) exp -> exp . MINUS exp
+    (6) exp -> exp . MULTIPLICATION exp
+    (7) exp -> exp . DIVISION exp
+    (8) exp -> exp . MODULO exp
+    (9) exp -> exp . GREATERTHAN exp
+    (10) exp -> exp . LESSTHAN exp
+    (11) exp -> exp . GREATERTHANOREQUALTO exp
+    (12) exp -> exp . LESSTHANOREQUALTO exp
+    (13) exp -> exp . EQUALTO exp
+    (14) exp -> exp . NOTEQUALTO exp
+    (15) exp -> exp . AND exp
+    (16) exp -> exp . OR exp
+    (17) exp -> exp . POW exp
+    (18) exp -> exp . INCREMENT
+    (19) exp -> exp . DECREMENT
+    (20) exp -> exp . NOT
+
+    SEMICOL         reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .)
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    MULTIPLICATION  shift and go to state 12
+    DIVISION        shift and go to state 13
+    MODULO          shift and go to state 14
+    GREATERTHAN     shift and go to state 15
+    LESSTHAN        shift and go to state 16
+    GREATERTHANOREQUALTO shift and go to state 17
+    LESSTHANOREQUALTO shift and go to state 18
+    EQUALTO         shift and go to state 19
+    NOTEQUALTO      shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    POW             shift and go to state 23
+    INCREMENT       shift and go to state 24
+    DECREMENT       shift and go to state 25
+    NOT             shift and go to state 26
+
+  ! PLUS            [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+  ! MINUS           [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+  ! MULTIPLICATION  [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+  ! DIVISION        [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+  ! MODULO          [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+  ! GREATERTHAN     [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+  ! LESSTHAN        [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+  ! GREATERTHANOREQUALTO [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+  ! LESSTHANOREQUALTO [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+  ! EQUALTO         [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+  ! NOTEQUALTO      [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+  ! AND             [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+  ! OR              [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+  ! POW             [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+  ! INCREMENT       [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+  ! DECREMENT       [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+  ! NOT             [ reduce using rule 11 (exp -> exp GREATERTHANOREQUALTO exp .) ]
+
+
+state 36
+
+    (12) exp -> exp LESSTHANOREQUALTO exp .
+    (4) exp -> exp . PLUS exp
+    (5) exp -> exp . MINUS exp
+    (6) exp -> exp . MULTIPLICATION exp
+    (7) exp -> exp . DIVISION exp
+    (8) exp -> exp . MODULO exp
+    (9) exp -> exp . GREATERTHAN exp
+    (10) exp -> exp . LESSTHAN exp
+    (11) exp -> exp . GREATERTHANOREQUALTO exp
+    (12) exp -> exp . LESSTHANOREQUALTO exp
+    (13) exp -> exp . EQUALTO exp
+    (14) exp -> exp . NOTEQUALTO exp
+    (15) exp -> exp . AND exp
+    (16) exp -> exp . OR exp
+    (17) exp -> exp . POW exp
+    (18) exp -> exp . INCREMENT
+    (19) exp -> exp . DECREMENT
+    (20) exp -> exp . NOT
+
+    SEMICOL         reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .)
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    MULTIPLICATION  shift and go to state 12
+    DIVISION        shift and go to state 13
+    MODULO          shift and go to state 14
+    GREATERTHAN     shift and go to state 15
+    LESSTHAN        shift and go to state 16
+    GREATERTHANOREQUALTO shift and go to state 17
+    LESSTHANOREQUALTO shift and go to state 18
+    EQUALTO         shift and go to state 19
+    NOTEQUALTO      shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    POW             shift and go to state 23
+    INCREMENT       shift and go to state 24
+    DECREMENT       shift and go to state 25
+    NOT             shift and go to state 26
+
+  ! PLUS            [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+  ! MINUS           [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+  ! MULTIPLICATION  [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+  ! DIVISION        [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+  ! MODULO          [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+  ! GREATERTHAN     [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+  ! LESSTHAN        [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+  ! GREATERTHANOREQUALTO [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+  ! LESSTHANOREQUALTO [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+  ! EQUALTO         [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+  ! NOTEQUALTO      [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+  ! AND             [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+  ! OR              [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+  ! POW             [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+  ! INCREMENT       [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+  ! DECREMENT       [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+  ! NOT             [ reduce using rule 12 (exp -> exp LESSTHANOREQUALTO exp .) ]
+
+
+state 37
+
+    (13) exp -> exp EQUALTO exp .
+    (4) exp -> exp . PLUS exp
+    (5) exp -> exp . MINUS exp
+    (6) exp -> exp . MULTIPLICATION exp
+    (7) exp -> exp . DIVISION exp
+    (8) exp -> exp . MODULO exp
+    (9) exp -> exp . GREATERTHAN exp
+    (10) exp -> exp . LESSTHAN exp
+    (11) exp -> exp . GREATERTHANOREQUALTO exp
+    (12) exp -> exp . LESSTHANOREQUALTO exp
+    (13) exp -> exp . EQUALTO exp
+    (14) exp -> exp . NOTEQUALTO exp
+    (15) exp -> exp . AND exp
+    (16) exp -> exp . OR exp
+    (17) exp -> exp . POW exp
+    (18) exp -> exp . INCREMENT
+    (19) exp -> exp . DECREMENT
+    (20) exp -> exp . NOT
+
+    SEMICOL         reduce using rule 13 (exp -> exp EQUALTO exp .)
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    MULTIPLICATION  shift and go to state 12
+    DIVISION        shift and go to state 13
+    MODULO          shift and go to state 14
+    GREATERTHAN     shift and go to state 15
+    LESSTHAN        shift and go to state 16
+    GREATERTHANOREQUALTO shift and go to state 17
+    LESSTHANOREQUALTO shift and go to state 18
+    EQUALTO         shift and go to state 19
+    NOTEQUALTO      shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    POW             shift and go to state 23
+    INCREMENT       shift and go to state 24
+    DECREMENT       shift and go to state 25
+    NOT             shift and go to state 26
+
+  ! PLUS            [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+  ! MINUS           [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+  ! MULTIPLICATION  [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+  ! DIVISION        [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+  ! MODULO          [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+  ! GREATERTHAN     [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+  ! LESSTHAN        [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+  ! GREATERTHANOREQUALTO [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+  ! LESSTHANOREQUALTO [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+  ! EQUALTO         [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+  ! NOTEQUALTO      [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+  ! AND             [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+  ! OR              [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+  ! POW             [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+  ! INCREMENT       [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+  ! DECREMENT       [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+  ! NOT             [ reduce using rule 13 (exp -> exp EQUALTO exp .) ]
+
+
+state 38
+
+    (14) exp -> exp NOTEQUALTO exp .
+    (4) exp -> exp . PLUS exp
+    (5) exp -> exp . MINUS exp
+    (6) exp -> exp . MULTIPLICATION exp
+    (7) exp -> exp . DIVISION exp
+    (8) exp -> exp . MODULO exp
+    (9) exp -> exp . GREATERTHAN exp
+    (10) exp -> exp . LESSTHAN exp
+    (11) exp -> exp . GREATERTHANOREQUALTO exp
+    (12) exp -> exp . LESSTHANOREQUALTO exp
+    (13) exp -> exp . EQUALTO exp
+    (14) exp -> exp . NOTEQUALTO exp
+    (15) exp -> exp . AND exp
+    (16) exp -> exp . OR exp
+    (17) exp -> exp . POW exp
+    (18) exp -> exp . INCREMENT
+    (19) exp -> exp . DECREMENT
+    (20) exp -> exp . NOT
+
+    SEMICOL         reduce using rule 14 (exp -> exp NOTEQUALTO exp .)
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    MULTIPLICATION  shift and go to state 12
+    DIVISION        shift and go to state 13
+    MODULO          shift and go to state 14
+    GREATERTHAN     shift and go to state 15
+    LESSTHAN        shift and go to state 16
+    GREATERTHANOREQUALTO shift and go to state 17
+    LESSTHANOREQUALTO shift and go to state 18
+    EQUALTO         shift and go to state 19
+    NOTEQUALTO      shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    POW             shift and go to state 23
+    INCREMENT       shift and go to state 24
+    DECREMENT       shift and go to state 25
+    NOT             shift and go to state 26
+
+  ! PLUS            [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+  ! MINUS           [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+  ! MULTIPLICATION  [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+  ! DIVISION        [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+  ! MODULO          [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+  ! GREATERTHAN     [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+  ! LESSTHAN        [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+  ! GREATERTHANOREQUALTO [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+  ! LESSTHANOREQUALTO [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+  ! EQUALTO         [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+  ! NOTEQUALTO      [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+  ! AND             [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+  ! OR              [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+  ! POW             [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+  ! INCREMENT       [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+  ! DECREMENT       [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+  ! NOT             [ reduce using rule 14 (exp -> exp NOTEQUALTO exp .) ]
+
+
+state 39
+
+    (15) exp -> exp AND exp .
+    (4) exp -> exp . PLUS exp
+    (5) exp -> exp . MINUS exp
+    (6) exp -> exp . MULTIPLICATION exp
+    (7) exp -> exp . DIVISION exp
+    (8) exp -> exp . MODULO exp
+    (9) exp -> exp . GREATERTHAN exp
+    (10) exp -> exp . LESSTHAN exp
+    (11) exp -> exp . GREATERTHANOREQUALTO exp
+    (12) exp -> exp . LESSTHANOREQUALTO exp
+    (13) exp -> exp . EQUALTO exp
+    (14) exp -> exp . NOTEQUALTO exp
+    (15) exp -> exp . AND exp
+    (16) exp -> exp . OR exp
+    (17) exp -> exp . POW exp
+    (18) exp -> exp . INCREMENT
+    (19) exp -> exp . DECREMENT
+    (20) exp -> exp . NOT
+
+    SEMICOL         reduce using rule 15 (exp -> exp AND exp .)
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    MULTIPLICATION  shift and go to state 12
+    DIVISION        shift and go to state 13
+    MODULO          shift and go to state 14
+    GREATERTHAN     shift and go to state 15
+    LESSTHAN        shift and go to state 16
+    GREATERTHANOREQUALTO shift and go to state 17
+    LESSTHANOREQUALTO shift and go to state 18
+    EQUALTO         shift and go to state 19
+    NOTEQUALTO      shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    POW             shift and go to state 23
+    INCREMENT       shift and go to state 24
+    DECREMENT       shift and go to state 25
+    NOT             shift and go to state 26
+
+  ! PLUS            [ reduce using rule 15 (exp -> exp AND exp .) ]
+  ! MINUS           [ reduce using rule 15 (exp -> exp AND exp .) ]
+  ! MULTIPLICATION  [ reduce using rule 15 (exp -> exp AND exp .) ]
+  ! DIVISION        [ reduce using rule 15 (exp -> exp AND exp .) ]
+  ! MODULO          [ reduce using rule 15 (exp -> exp AND exp .) ]
+  ! GREATERTHAN     [ reduce using rule 15 (exp -> exp AND exp .) ]
+  ! LESSTHAN        [ reduce using rule 15 (exp -> exp AND exp .) ]
+  ! GREATERTHANOREQUALTO [ reduce using rule 15 (exp -> exp AND exp .) ]
+  ! LESSTHANOREQUALTO [ reduce using rule 15 (exp -> exp AND exp .) ]
+  ! EQUALTO         [ reduce using rule 15 (exp -> exp AND exp .) ]
+  ! NOTEQUALTO      [ reduce using rule 15 (exp -> exp AND exp .) ]
+  ! AND             [ reduce using rule 15 (exp -> exp AND exp .) ]
+  ! OR              [ reduce using rule 15 (exp -> exp AND exp .) ]
+  ! POW             [ reduce using rule 15 (exp -> exp AND exp .) ]
+  ! INCREMENT       [ reduce using rule 15 (exp -> exp AND exp .) ]
+  ! DECREMENT       [ reduce using rule 15 (exp -> exp AND exp .) ]
+  ! NOT             [ reduce using rule 15 (exp -> exp AND exp .) ]
+
+
+state 40
+
+    (16) exp -> exp OR exp .
+    (4) exp -> exp . PLUS exp
+    (5) exp -> exp . MINUS exp
+    (6) exp -> exp . MULTIPLICATION exp
+    (7) exp -> exp . DIVISION exp
+    (8) exp -> exp . MODULO exp
+    (9) exp -> exp . GREATERTHAN exp
+    (10) exp -> exp . LESSTHAN exp
+    (11) exp -> exp . GREATERTHANOREQUALTO exp
+    (12) exp -> exp . LESSTHANOREQUALTO exp
+    (13) exp -> exp . EQUALTO exp
+    (14) exp -> exp . NOTEQUALTO exp
+    (15) exp -> exp . AND exp
+    (16) exp -> exp . OR exp
+    (17) exp -> exp . POW exp
+    (18) exp -> exp . INCREMENT
+    (19) exp -> exp . DECREMENT
+    (20) exp -> exp . NOT
+
+    SEMICOL         reduce using rule 16 (exp -> exp OR exp .)
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    MULTIPLICATION  shift and go to state 12
+    DIVISION        shift and go to state 13
+    MODULO          shift and go to state 14
+    GREATERTHAN     shift and go to state 15
+    LESSTHAN        shift and go to state 16
+    GREATERTHANOREQUALTO shift and go to state 17
+    LESSTHANOREQUALTO shift and go to state 18
+    EQUALTO         shift and go to state 19
+    NOTEQUALTO      shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    POW             shift and go to state 23
+    INCREMENT       shift and go to state 24
+    DECREMENT       shift and go to state 25
+    NOT             shift and go to state 26
+
+  ! PLUS            [ reduce using rule 16 (exp -> exp OR exp .) ]
+  ! MINUS           [ reduce using rule 16 (exp -> exp OR exp .) ]
+  ! MULTIPLICATION  [ reduce using rule 16 (exp -> exp OR exp .) ]
+  ! DIVISION        [ reduce using rule 16 (exp -> exp OR exp .) ]
+  ! MODULO          [ reduce using rule 16 (exp -> exp OR exp .) ]
+  ! GREATERTHAN     [ reduce using rule 16 (exp -> exp OR exp .) ]
+  ! LESSTHAN        [ reduce using rule 16 (exp -> exp OR exp .) ]
+  ! GREATERTHANOREQUALTO [ reduce using rule 16 (exp -> exp OR exp .) ]
+  ! LESSTHANOREQUALTO [ reduce using rule 16 (exp -> exp OR exp .) ]
+  ! EQUALTO         [ reduce using rule 16 (exp -> exp OR exp .) ]
+  ! NOTEQUALTO      [ reduce using rule 16 (exp -> exp OR exp .) ]
+  ! AND             [ reduce using rule 16 (exp -> exp OR exp .) ]
+  ! OR              [ reduce using rule 16 (exp -> exp OR exp .) ]
+  ! POW             [ reduce using rule 16 (exp -> exp OR exp .) ]
+  ! INCREMENT       [ reduce using rule 16 (exp -> exp OR exp .) ]
+  ! DECREMENT       [ reduce using rule 16 (exp -> exp OR exp .) ]
+  ! NOT             [ reduce using rule 16 (exp -> exp OR exp .) ]
+
+
+state 41
+
+    (17) exp -> exp POW exp .
+    (4) exp -> exp . PLUS exp
+    (5) exp -> exp . MINUS exp
+    (6) exp -> exp . MULTIPLICATION exp
+    (7) exp -> exp . DIVISION exp
+    (8) exp -> exp . MODULO exp
+    (9) exp -> exp . GREATERTHAN exp
+    (10) exp -> exp . LESSTHAN exp
+    (11) exp -> exp . GREATERTHANOREQUALTO exp
+    (12) exp -> exp . LESSTHANOREQUALTO exp
+    (13) exp -> exp . EQUALTO exp
+    (14) exp -> exp . NOTEQUALTO exp
+    (15) exp -> exp . AND exp
+    (16) exp -> exp . OR exp
+    (17) exp -> exp . POW exp
+    (18) exp -> exp . INCREMENT
+    (19) exp -> exp . DECREMENT
+    (20) exp -> exp . NOT
+
+    SEMICOL         reduce using rule 17 (exp -> exp POW exp .)
+    PLUS            shift and go to state 10
+    MINUS           shift and go to state 11
+    MULTIPLICATION  shift and go to state 12
+    DIVISION        shift and go to state 13
+    MODULO          shift and go to state 14
+    GREATERTHAN     shift and go to state 15
+    LESSTHAN        shift and go to state 16
+    GREATERTHANOREQUALTO shift and go to state 17
+    LESSTHANOREQUALTO shift and go to state 18
+    EQUALTO         shift and go to state 19
+    NOTEQUALTO      shift and go to state 20
+    AND             shift and go to state 21
+    OR              shift and go to state 22
+    POW             shift and go to state 23
+    INCREMENT       shift and go to state 24
+    DECREMENT       shift and go to state 25
+    NOT             shift and go to state 26
+
+  ! PLUS            [ reduce using rule 17 (exp -> exp POW exp .) ]
+  ! MINUS           [ reduce using rule 17 (exp -> exp POW exp .) ]
+  ! MULTIPLICATION  [ reduce using rule 17 (exp -> exp POW exp .) ]
+  ! DIVISION        [ reduce using rule 17 (exp -> exp POW exp .) ]
+  ! MODULO          [ reduce using rule 17 (exp -> exp POW exp .) ]
+  ! GREATERTHAN     [ reduce using rule 17 (exp -> exp POW exp .) ]
+  ! LESSTHAN        [ reduce using rule 17 (exp -> exp POW exp .) ]
+  ! GREATERTHANOREQUALTO [ reduce using rule 17 (exp -> exp POW exp .) ]
+  ! LESSTHANOREQUALTO [ reduce using rule 17 (exp -> exp POW exp .) ]
+  ! EQUALTO         [ reduce using rule 17 (exp -> exp POW exp .) ]
+  ! NOTEQUALTO      [ reduce using rule 17 (exp -> exp POW exp .) ]
+  ! AND             [ reduce using rule 17 (exp -> exp POW exp .) ]
+  ! OR              [ reduce using rule 17 (exp -> exp POW exp .) ]
+  ! POW             [ reduce using rule 17 (exp -> exp POW exp .) ]
+  ! INCREMENT       [ reduce using rule 17 (exp -> exp POW exp .) ]
+  ! DECREMENT       [ reduce using rule 17 (exp -> exp POW exp .) ]
+  ! NOT             [ reduce using rule 17 (exp -> exp POW exp .) ]
 

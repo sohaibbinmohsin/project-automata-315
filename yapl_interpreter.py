@@ -20,10 +20,31 @@ def exp_eval(p):
         return exp_eval(p[1]) + 1
     elif operator == '--':
         return exp_eval(p[1]) - 1
+    elif operator == '<':
+        return exp_eval(p[1]) < exp_eval(p[2])
+    elif operator == '>':
+        return exp_eval(p[1]) > exp_eval(p[2])
+    elif operator == '<=':
+        return exp_eval(p[1]) <= exp_eval(p[2])
+    elif operator == '>=':
+        return exp_eval(p[1]) >= exp_eval(p[2])
+    elif operator == '==':
+        return exp_eval(p[1]) == exp_eval(p[2])
+    elif operator == '!=':
+        return exp_eval(p[1]) != exp_eval(p[2])
+    elif operator == '&&':
+        return exp_eval(p[1]) and exp_eval(p[2])
+    elif operator == '||':
+        return exp_eval(p[1]) or exp_eval(p[2])
+    elif operator == '!':
+        return not exp_eval(p[1])
+    elif operator == 'UMINUS':
+        return (- exp_eval(p[1]))
     else:
-        return p[1] 
+        return p[1]
 
 def stmt_eval(p):
+    # print(p)
     stype = p[0]
     if stype == 'PRINT':
         exp = p[1]
