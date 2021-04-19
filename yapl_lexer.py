@@ -36,8 +36,8 @@ tokens = [
     'ELSE',
     'DOWHILE',
     'DEF',
-    'COMMENT',
-    'ASSIGN'
+    'ASSIGN',
+    'COMMA'
 ]
 
 t_LPAREN = r'\('
@@ -65,6 +65,46 @@ t_SEMICOL = r'\;'
 t_ignore = '\t\r\n\f\v '
 t_ignore_COMMENT = r'\#.*'
 t_ASSIGN = r'\='
+t_COMMA = r'\,'
+
+def t_FLOAT(t):
+    r'\d*\.\d+|float'
+    if t.value == 'float':
+        return t
+    t.value = float(t.value)
+    return t
+
+def t_INT(t):
+    r'\d+|int'
+    if t.value == 'int':
+        return t
+    t.value = int(t.value)
+    return t
+
+def t_STRING(t):
+    r'\".*?\"|string'
+    if t.value == 'string':
+        return t
+    t.value = t.value.strip('"')
+    # print(t)
+    return t
+
+def t_CHAR(t):
+    r'\'[a-zA-Z0-9]*\'|char'
+    if t.value == 'char':
+        return t
+    t.value = t.value.strip("'")
+    return t
+
+def t_BOOL(t):
+    r'true|false|bool'
+    if t.value == 'bool':
+        return t
+    if t.value == 'true':
+        t.value = True
+    else:
+        t.value = False
+    return t
 
 def t_NAME(t): #keywords
     r'[a-zA-Z_][a-zA-Z_0-9]*'
@@ -82,34 +122,6 @@ def t_NAME(t): #keywords
         t.type = 'DEF'
     else:
         t.type = 'NAME'
-    return t
-
-def t_INT(t):
-    r'\d+'
-    t.value = int(t.value)
-    return t
-
-def t_FLOAT(t):
-    r'\d*\.\d+'
-    t.value = float(t.value)
-    return t
-
-def t_STRING(t):
-    r'\".*?\"'
-    t.value = t.value.strip('"')
-    print(t)
-    return t
-
-def t_CHAR(t):
-    r'\'[a-zA-Z0-9]*\''
-    return t
-
-def t_BOOL(t):
-    r'true|false'
-    if t.value == 'true':
-        t.value = True
-    else:
-        t.value = False
     return t
 
 def t_lineno(t):

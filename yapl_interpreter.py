@@ -2,10 +2,18 @@ from yapl_lexer import *
 from yapl_parser import *
 import sys
 
+variables = {}
+
 def exp_eval(p):
     operator = p[0]
-    if operator == '+':
+    # print(operator)
+    if operator == 'PAREN':
+        return exp_eval(p[1])
+    elif operator == '+':
         return exp_eval(p[1]) + exp_eval(p[2])
+    elif operator == ',':
+        # exp = [p[1], exp_eval(p[2])]
+        return str(exp_eval(p[1])) + " " + str(exp_eval(p[2]))
     elif operator == '-':
         return exp_eval(p[1]) - exp_eval(p[2])
     elif operator == '*':
@@ -42,13 +50,48 @@ def exp_eval(p):
         return (- exp_eval(p[1]))
     else:
         return p[1]
+    
+def var_info(p):
+    print(p)
+    if (p[2] in variables) == False:
+        if p[0] == p[1]:
+            return True
+        else:
+            return False
+    else:
+        print(p[0])
+        print(variables[p[2]][0])
+        if variables[p[2]][0] == p[0]:
+            return True
+        else:
+            return False
+        
+def exp_assign(p):
+    # if p[1] != 'int' and p[1] != 'float' and p[1] != 'bool':
+    exp = (p[1], p[2], str(p[3]))
+    if var_info(exp) == False:
+        raise TypeError('TypeError')
+    if (p[0] in variables) == True:
+        raise TypeError('RedeclerationError')
+    variables[p[0]] = [p[1], p[3]]
 
 def stmt_eval(p):
-    # print(p)
+    print(p)
     stype = p[0]
     if stype == 'PRINT':
-        exp = p[1]
-        print(exp_eval(exp))
+        for i in range(1, len(p)):
+            exp = p[i]
+            if len(exp) == 1:
+                if variables[exp].has_key():
+                    print(var_info(exp))
+                else:
+                    print(exp, end=' ')
+            else:
+                print(exp_eval(exp), end=' ')
+        print()
+    else:
+        exp_assign(p)
+        print(variables)
 
 def run_program(p):
     for stmt in p:
