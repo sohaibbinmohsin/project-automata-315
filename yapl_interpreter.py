@@ -52,7 +52,7 @@ def exp_eval(p):
         return p[1]
     
 def var_info(p):
-    print(p)
+    # print(p)
     if (p[2] in variables) == False:
         if p[0] == p[1]:
             return True
