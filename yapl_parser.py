@@ -42,18 +42,9 @@ def p_print_stmt(p):
     
 def p_var_assign(p):
     """
-    stmt : INT NAME ASSIGN exp SEMICOL
-         | FLOAT NAME ASSIGN exp SEMICOL
-         | CHAR NAME ASSIGN exp SEMICOL
-         | STRING NAME ASSIGN exp SEMICOL
-         | BOOL NAME ASSIGN exp SEMICOL
-         | FLOAT NAME ASSIGN FLOAT SEMICOL
-         | INT NAME ASSIGN INT SEMICOL
-         | STRING NAME ASSIGN STRING SEMICOL
-         | CHAR NAME ASSIGN CHAR SEMICOL
-         | BOOL NAME ASSIGN BOOL SEMICOL
+    stmt : VARTYPE NAME ASSIGN exp SEMICOL
     """
-    p[0] = (p[2], p[1], p[4], p[4])
+    p[0] = (p[2], p[1], p[4])
     
 def p_exp_float(p):
     """
@@ -66,6 +57,24 @@ def p_exp_num(p):
     exp : INT
     """
     p[0] = ('NUM', p[1])
+    
+def p_exp_bool(p):
+    """
+    exp : BOOL
+    """
+    p[0] = ('BOOL', p[1])
+    
+def p_exp_char(p):
+    """
+    exp : CHAR
+    """
+    p[0] = ('CHAR', p[1])
+    
+def p_exp_name(p):
+    """
+    exp : NAME
+    """
+    p[0] = ('NAME', p[1])
 
 def p_exp_bin(p):
     """ 
@@ -87,7 +96,6 @@ def p_exp_bin(p):
         | exp INCREMENT
         | exp DECREMENT
         | exp NOT
-        | NAME
         | STRING
     """
     if len(p) > 3:
@@ -96,7 +104,7 @@ def p_exp_bin(p):
         p[0] = ('STRING', p[1])
     else:
         p[0] = (p[2], p[1])
-    
+
 def p_exp_uminus(p):
      'exp : MINUS exp %prec UMINUS'
      p[0] = ('UMINUS', p[2])

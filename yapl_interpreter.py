@@ -51,47 +51,91 @@ def exp_eval(p):
     else:
         return p[1]
     
-def var_info(p):
+def var_check(p):
     # print(p)
-    if (p[2] in variables) == False:
-        if p[0] == p[1]:
-            return True
+    var = str(p[1])
+    if (var in variables) == False:
+        # print(p[0])
+        if p[0] == 'int':
+            if type(p[1][1]) == int:
+                return True
+            return False
+        elif p[0] == 'float':
+            if type(p[1][1]) == float:
+                return True
+            return False
+        elif p[0] == 'char':
+            v = p[1][1].strip("'")
+            # print(v)
+            # print(len(v))
+            if len(v) == 1:
+                return True
+            return False
+        elif p[0] == 'string':
+            # print(type(p[1][1]))
+            v = p[1][1].strip('"')
+            if type(v) == str:
+                return True
+            return False
+        elif p[0] == 'bool':
+            if type(p[1][1]) == bool:
+                return True
+            return False
         else:
             return False
     else:
-        print(p[0])
-        print(variables[p[2]][0])
-        if variables[p[2]][0] == p[0]:
+        # print(p[0])
+        # print(variables[p[2]][0])
+        var_type = variables[var][0]
+        if  var_type == p[0]:
             return True
         else:
             return False
         
 def exp_assign(p):
     # if p[1] != 'int' and p[1] != 'float' and p[1] != 'bool':
-    exp = (p[1], p[2], str(p[3]))
-    if var_info(exp) == False:
+    exp = (p[1], p[2])
+    if var_check(exp) == False:
         raise TypeError('TypeError')
     if (p[0] in variables) == True:
         raise TypeError('RedeclerationError')
-    variables[p[0]] = [p[1], p[3]]
+    if p[1] == 'char' and p[2][0] == 'CHAR':
+        val = p[2][1].strip("'")
+        variables[p[0]] = [p[1], (p[2][0], val)]
+    else:
+        variables[p[0]] = [p[1], p[2]]    
+    
+    
+def var_val(p):
+    val = variables[p][1][1]
+    if val in variables == False:
+        return val
+    else:
+        var_val(val)
+    
 
 def stmt_eval(p):
-    print(p)
+    # print(p)
     stype = p[0]
     if stype == 'PRINT':
         for i in range(1, len(p)):
             exp = p[i]
-            if len(exp) == 1:
-                if variables[exp].has_key():
-                    print(var_info(exp))
-                else:
-                    print(exp, end=' ')
+            # print('exp:', exp)
+            # print(len(exp))
+            # print(exp[1][0])
+            # print(exp[1][1])
+            if exp[1][0] == 'NAME':
+                # if exp in variables:
+                    
+                # else:
+                #     print(exp, end=' ')
+                print(var_val(exp[1][1]))
             else:
                 print(exp_eval(exp), end=' ')
         print()
     else:
         exp_assign(p)
-        print(variables)
+        # print(variables)
 
 def run_program(p):
     for stmt in p:

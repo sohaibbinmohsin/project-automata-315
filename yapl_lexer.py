@@ -37,7 +37,8 @@ tokens = [
     'DOWHILE',
     'DEF',
     'ASSIGN',
-    'COMMA'
+    'COMMA',
+    'VARTYPE'
 ]
 
 t_LPAREN = r'\('
@@ -67,43 +68,37 @@ t_ignore_COMMENT = r'\#.*'
 t_ASSIGN = r'\='
 t_COMMA = r'\,'
 
+def t_VARTYPE(t):
+    r'int|float|char|string|bool'
+    return t
+
 def t_FLOAT(t):
-    r'\d*\.\d+|float'
-    if t.value == 'float':
-        return t
+    r'\d*\.\d+'
     t.value = float(t.value)
     return t
 
 def t_INT(t):
-    r'\d+|int'
-    if t.value == 'int':
-        return t
+    r'\d+'
     t.value = int(t.value)
     return t
 
+def t_BOOL(t):
+    r'true|false'
+    if t.value == 'true':
+        t.value = True
+    else:
+        t.value = False
+    return t
+
 def t_STRING(t):
-    r'\".*?\"|string'
-    if t.value == 'string':
-        return t
+    r'\".*?\"'
     t.value = t.value.strip('"')
     # print(t)
     return t
 
 def t_CHAR(t):
-    r'\'[a-zA-Z0-9]*\'|char'
-    if t.value == 'char':
-        return t
-    t.value = t.value.strip("'")
-    return t
-
-def t_BOOL(t):
-    r'true|false|bool'
-    if t.value == 'bool':
-        return t
-    if t.value == 'true':
-        t.value = True
-    else:
-        t.value = False
+    r'\'[a-zA-Z0-9]*\''
+    # t.value = t.value.strip("'")
     return t
 
 def t_NAME(t): #keywords
