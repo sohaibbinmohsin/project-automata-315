@@ -4,11 +4,6 @@ Unused terminals:
 
     DEF
     DOWHILE
-    ELSE
-    ELSEIF
-    IF
-    LCURLY
-    RCURLY
 
 Grammar
 
@@ -45,6 +40,10 @@ Rule 29    exp -> exp DECREMENT
 Rule 30    exp -> exp NOT
 Rule 31    exp -> STRING
 Rule 32    exp -> MINUS exp
+Rule 33    stmt -> IF LPAREN exp RPAREN LCURLY S RCURLY block
+Rule 34    block -> ELSEIF LPAREN exp RPAREN LCURLY S RCURLY block
+Rule 35    block -> ELSE LCURLY S RCURLY
+Rule 36    block -> <empty>
 
 Terminals, with rules where they appear
 
@@ -57,19 +56,19 @@ DECREMENT            : 29
 DEF                  : 
 DIVISION             : 16
 DOWHILE              : 
-ELSE                 : 
-ELSEIF               : 
+ELSE                 : 35
+ELSEIF               : 34
 EQUALTO              : 22
 FLOAT                : 8
 GREATERTHAN          : 18
 GREATERTHANOREQUALTO : 20
-IF                   : 
+IF                   : 33
 INCREMENT            : 28
 INT                  : 9
-LCURLY               : 
+LCURLY               : 33 34 35
 LESSTHAN             : 19
 LESSTHANOREQUALTO    : 21
-LPAREN               : 3 6
+LPAREN               : 3 6 33 34
 MINUS                : 14 32
 MODULO               : 17
 MULTIPLICATION       : 15
@@ -80,8 +79,8 @@ OR                   : 26
 PLUS                 : 13
 POW                  : 27
 PRINT                : 4 5 6
-RCURLY               : 
-RPAREN               : 3 6
+RCURLY               : 33 34 35
+RPAREN               : 3 6 33 34
 SEMICOL              : 4 5 6 7
 STRING               : 31
 VARTYPE              : 7
@@ -89,8 +88,9 @@ error                :
 
 Nonterminals, with rules where they appear
 
-S                    : 1 0
-exp                  : 3 4 4 5 6 7 13 13 14 14 15 15 16 16 17 17 18 18 19 19 20 20 21 21 22 22 23 23 24 24 25 25 26 26 27 27 28 29 30 32
+S                    : 1 33 34 35 0
+block                : 33 34
+exp                  : 3 4 4 5 6 7 13 13 14 14 15 15 16 16 17 17 18 18 19 19 20 20 21 21 22 22 23 23 24 24 25 25 26 26 27 27 28 29 30 32 33 34
 stmt                 : 1
 
 Parsing method: LALR
@@ -104,10 +104,12 @@ state 0
     (5) stmt -> . PRINT exp SEMICOL
     (6) stmt -> . PRINT LPAREN exp RPAREN SEMICOL
     (7) stmt -> . VARTYPE NAME ASSIGN exp SEMICOL
+    (33) stmt -> . IF LPAREN exp RPAREN LCURLY S RCURLY block
 
     $end            reduce using rule 2 (S -> .)
     PRINT           shift and go to state 3
     VARTYPE         shift and go to state 4
+    IF              shift and go to state 5
 
     S                              shift and go to state 1
     stmt                           shift and go to state 2
@@ -127,13 +129,16 @@ state 2
     (5) stmt -> . PRINT exp SEMICOL
     (6) stmt -> . PRINT LPAREN exp RPAREN SEMICOL
     (7) stmt -> . VARTYPE NAME ASSIGN exp SEMICOL
+    (33) stmt -> . IF LPAREN exp RPAREN LCURLY S RCURLY block
 
     $end            reduce using rule 2 (S -> .)
+    RCURLY          reduce using rule 2 (S -> .)
     PRINT           shift and go to state 3
     VARTYPE         shift and go to state 4
+    IF              shift and go to state 5
 
     stmt                           shift and go to state 2
-    S                              shift and go to state 5
+    S                              shift and go to state 6
 
 state 3
 
@@ -167,32 +172,40 @@ state 3
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 7
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 8
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 6
+    exp                            shift and go to state 7
 
 state 4
 
     (7) stmt -> VARTYPE . NAME ASSIGN exp SEMICOL
 
-    NAME            shift and go to state 15
+    NAME            shift and go to state 16
 
 
 state 5
 
-    (1) S -> stmt S .
+    (33) stmt -> IF . LPAREN exp RPAREN LCURLY S RCURLY block
 
-    $end            reduce using rule 1 (S -> stmt S .)
+    LPAREN          shift and go to state 17
 
 
 state 6
+
+    (1) S -> stmt S .
+
+    $end            reduce using rule 1 (S -> stmt S .)
+    RCURLY          reduce using rule 1 (S -> stmt S .)
+
+
+state 7
 
     (4) stmt -> PRINT exp . COMMA exp SEMICOL
     (5) stmt -> PRINT exp . SEMICOL
@@ -215,28 +228,28 @@ state 6
     (29) exp -> exp . DECREMENT
     (30) exp -> exp . NOT
 
-    COMMA           shift and go to state 16
-    SEMICOL         shift and go to state 17
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    COMMA           shift and go to state 18
+    SEMICOL         shift and go to state 19
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
 
-state 7
+state 8
 
     (6) stmt -> PRINT LPAREN . exp RPAREN SEMICOL
     (3) exp -> LPAREN . exp RPAREN
@@ -267,18 +280,18 @@ state 7
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 36
+    exp                            shift and go to state 38
 
-state 8
+state 9
 
     (8) exp -> FLOAT .
 
@@ -304,7 +317,7 @@ state 8
     RPAREN          reduce using rule 8 (exp -> FLOAT .)
 
 
-state 9
+state 10
 
     (9) exp -> INT .
 
@@ -330,7 +343,7 @@ state 9
     RPAREN          reduce using rule 9 (exp -> INT .)
 
 
-state 10
+state 11
 
     (10) exp -> BOOL .
 
@@ -356,7 +369,7 @@ state 10
     RPAREN          reduce using rule 10 (exp -> BOOL .)
 
 
-state 11
+state 12
 
     (11) exp -> CHAR .
 
@@ -382,7 +395,7 @@ state 11
     RPAREN          reduce using rule 11 (exp -> CHAR .)
 
 
-state 12
+state 13
 
     (12) exp -> NAME .
 
@@ -408,7 +421,7 @@ state 12
     RPAREN          reduce using rule 12 (exp -> NAME .)
 
 
-state 13
+state 14
 
     (32) exp -> MINUS . exp
     (3) exp -> . LPAREN exp RPAREN
@@ -438,18 +451,18 @@ state 13
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 37
+    exp                            shift and go to state 39
 
-state 14
+state 15
 
     (31) exp -> STRING .
 
@@ -475,14 +488,55 @@ state 14
     RPAREN          reduce using rule 31 (exp -> STRING .)
 
 
-state 15
+state 16
 
     (7) stmt -> VARTYPE NAME . ASSIGN exp SEMICOL
 
-    ASSIGN          shift and go to state 38
+    ASSIGN          shift and go to state 40
 
 
-state 16
+state 17
+
+    (33) stmt -> IF LPAREN . exp RPAREN LCURLY S RCURLY block
+    (3) exp -> . LPAREN exp RPAREN
+    (8) exp -> . FLOAT
+    (9) exp -> . INT
+    (10) exp -> . BOOL
+    (11) exp -> . CHAR
+    (12) exp -> . NAME
+    (13) exp -> . exp PLUS exp
+    (14) exp -> . exp MINUS exp
+    (15) exp -> . exp MULTIPLICATION exp
+    (16) exp -> . exp DIVISION exp
+    (17) exp -> . exp MODULO exp
+    (18) exp -> . exp GREATERTHAN exp
+    (19) exp -> . exp LESSTHAN exp
+    (20) exp -> . exp GREATERTHANOREQUALTO exp
+    (21) exp -> . exp LESSTHANOREQUALTO exp
+    (22) exp -> . exp EQUALTO exp
+    (23) exp -> . exp NOTEQUALTO exp
+    (24) exp -> . exp COMMA exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . exp POW exp
+    (28) exp -> . exp INCREMENT
+    (29) exp -> . exp DECREMENT
+    (30) exp -> . exp NOT
+    (31) exp -> . STRING
+    (32) exp -> . MINUS exp
+
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
+
+    exp                            shift and go to state 41
+
+state 18
 
     (4) stmt -> PRINT exp COMMA . exp SEMICOL
     (24) exp -> exp COMMA . exp
@@ -513,27 +567,29 @@ state 16
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 39
+    exp                            shift and go to state 42
 
-state 17
+state 19
 
     (5) stmt -> PRINT exp SEMICOL .
 
     PRINT           reduce using rule 5 (stmt -> PRINT exp SEMICOL .)
     VARTYPE         reduce using rule 5 (stmt -> PRINT exp SEMICOL .)
+    IF              reduce using rule 5 (stmt -> PRINT exp SEMICOL .)
     $end            reduce using rule 5 (stmt -> PRINT exp SEMICOL .)
+    RCURLY          reduce using rule 5 (stmt -> PRINT exp SEMICOL .)
 
 
-state 18
+state 20
 
     (13) exp -> exp PLUS . exp
     (3) exp -> . LPAREN exp RPAREN
@@ -563,18 +619,18 @@ state 18
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 40
+    exp                            shift and go to state 43
 
-state 19
+state 21
 
     (14) exp -> exp MINUS . exp
     (3) exp -> . LPAREN exp RPAREN
@@ -604,18 +660,18 @@ state 19
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 41
+    exp                            shift and go to state 44
 
-state 20
+state 22
 
     (15) exp -> exp MULTIPLICATION . exp
     (3) exp -> . LPAREN exp RPAREN
@@ -645,18 +701,18 @@ state 20
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 42
+    exp                            shift and go to state 45
 
-state 21
+state 23
 
     (16) exp -> exp DIVISION . exp
     (3) exp -> . LPAREN exp RPAREN
@@ -686,18 +742,18 @@ state 21
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 43
+    exp                            shift and go to state 46
 
-state 22
+state 24
 
     (17) exp -> exp MODULO . exp
     (3) exp -> . LPAREN exp RPAREN
@@ -727,18 +783,18 @@ state 22
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 44
+    exp                            shift and go to state 47
 
-state 23
+state 25
 
     (18) exp -> exp GREATERTHAN . exp
     (3) exp -> . LPAREN exp RPAREN
@@ -768,18 +824,18 @@ state 23
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 45
+    exp                            shift and go to state 48
 
-state 24
+state 26
 
     (19) exp -> exp LESSTHAN . exp
     (3) exp -> . LPAREN exp RPAREN
@@ -809,18 +865,18 @@ state 24
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 46
+    exp                            shift and go to state 49
 
-state 25
+state 27
 
     (20) exp -> exp GREATERTHANOREQUALTO . exp
     (3) exp -> . LPAREN exp RPAREN
@@ -850,18 +906,18 @@ state 25
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 47
+    exp                            shift and go to state 50
 
-state 26
+state 28
 
     (21) exp -> exp LESSTHANOREQUALTO . exp
     (3) exp -> . LPAREN exp RPAREN
@@ -891,18 +947,18 @@ state 26
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 48
+    exp                            shift and go to state 51
 
-state 27
+state 29
 
     (22) exp -> exp EQUALTO . exp
     (3) exp -> . LPAREN exp RPAREN
@@ -932,18 +988,18 @@ state 27
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 49
+    exp                            shift and go to state 52
 
-state 28
+state 30
 
     (23) exp -> exp NOTEQUALTO . exp
     (3) exp -> . LPAREN exp RPAREN
@@ -973,18 +1029,18 @@ state 28
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 50
+    exp                            shift and go to state 53
 
-state 29
+state 31
 
     (25) exp -> exp AND . exp
     (3) exp -> . LPAREN exp RPAREN
@@ -1014,18 +1070,18 @@ state 29
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 51
+    exp                            shift and go to state 54
 
-state 30
+state 32
 
     (26) exp -> exp OR . exp
     (3) exp -> . LPAREN exp RPAREN
@@ -1055,18 +1111,18 @@ state 30
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 52
+    exp                            shift and go to state 55
 
-state 31
+state 33
 
     (27) exp -> exp POW . exp
     (3) exp -> . LPAREN exp RPAREN
@@ -1096,18 +1152,18 @@ state 31
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 53
+    exp                            shift and go to state 56
 
-state 32
+state 34
 
     (28) exp -> exp INCREMENT .
 
@@ -1133,7 +1189,7 @@ state 32
     RPAREN          reduce using rule 28 (exp -> exp INCREMENT .)
 
 
-state 33
+state 35
 
     (29) exp -> exp DECREMENT .
 
@@ -1159,7 +1215,7 @@ state 33
     RPAREN          reduce using rule 29 (exp -> exp DECREMENT .)
 
 
-state 34
+state 36
 
     (30) exp -> exp NOT .
 
@@ -1185,7 +1241,7 @@ state 34
     RPAREN          reduce using rule 30 (exp -> exp NOT .)
 
 
-state 35
+state 37
 
     (3) exp -> LPAREN . exp RPAREN
     (3) exp -> . LPAREN exp RPAREN
@@ -1215,18 +1271,18 @@ state 35
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 54
+    exp                            shift and go to state 57
 
-state 36
+state 38
 
     (6) stmt -> PRINT LPAREN exp . RPAREN SEMICOL
     (3) exp -> LPAREN exp . RPAREN
@@ -1249,28 +1305,28 @@ state 36
     (29) exp -> exp . DECREMENT
     (30) exp -> exp . NOT
 
-    RPAREN          shift and go to state 55
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    COMMA           shift and go to state 56
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    RPAREN          shift and go to state 58
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    COMMA           shift and go to state 59
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
 
-state 37
+state 39
 
     (32) exp -> MINUS exp .
     (13) exp -> exp . PLUS exp
@@ -1313,27 +1369,27 @@ state 37
     NOT             reduce using rule 32 (exp -> MINUS exp .)
     RPAREN          reduce using rule 32 (exp -> MINUS exp .)
 
-  ! PLUS            [ shift and go to state 18 ]
-  ! MINUS           [ shift and go to state 19 ]
-  ! MULTIPLICATION  [ shift and go to state 20 ]
-  ! DIVISION        [ shift and go to state 21 ]
-  ! MODULO          [ shift and go to state 22 ]
-  ! GREATERTHAN     [ shift and go to state 23 ]
-  ! LESSTHAN        [ shift and go to state 24 ]
-  ! GREATERTHANOREQUALTO [ shift and go to state 25 ]
-  ! LESSTHANOREQUALTO [ shift and go to state 26 ]
-  ! EQUALTO         [ shift and go to state 27 ]
-  ! NOTEQUALTO      [ shift and go to state 28 ]
-  ! COMMA           [ shift and go to state 56 ]
-  ! AND             [ shift and go to state 29 ]
-  ! OR              [ shift and go to state 30 ]
-  ! POW             [ shift and go to state 31 ]
-  ! INCREMENT       [ shift and go to state 32 ]
-  ! DECREMENT       [ shift and go to state 33 ]
-  ! NOT             [ shift and go to state 34 ]
+  ! PLUS            [ shift and go to state 20 ]
+  ! MINUS           [ shift and go to state 21 ]
+  ! MULTIPLICATION  [ shift and go to state 22 ]
+  ! DIVISION        [ shift and go to state 23 ]
+  ! MODULO          [ shift and go to state 24 ]
+  ! GREATERTHAN     [ shift and go to state 25 ]
+  ! LESSTHAN        [ shift and go to state 26 ]
+  ! GREATERTHANOREQUALTO [ shift and go to state 27 ]
+  ! LESSTHANOREQUALTO [ shift and go to state 28 ]
+  ! EQUALTO         [ shift and go to state 29 ]
+  ! NOTEQUALTO      [ shift and go to state 30 ]
+  ! COMMA           [ shift and go to state 59 ]
+  ! AND             [ shift and go to state 31 ]
+  ! OR              [ shift and go to state 32 ]
+  ! POW             [ shift and go to state 33 ]
+  ! INCREMENT       [ shift and go to state 34 ]
+  ! DECREMENT       [ shift and go to state 35 ]
+  ! NOT             [ shift and go to state 36 ]
 
 
-state 38
+state 40
 
     (7) stmt -> VARTYPE NAME ASSIGN . exp SEMICOL
     (3) exp -> . LPAREN exp RPAREN
@@ -1363,18 +1419,61 @@ state 38
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 57
+    exp                            shift and go to state 60
 
-state 39
+state 41
+
+    (33) stmt -> IF LPAREN exp . RPAREN LCURLY S RCURLY block
+    (13) exp -> exp . PLUS exp
+    (14) exp -> exp . MINUS exp
+    (15) exp -> exp . MULTIPLICATION exp
+    (16) exp -> exp . DIVISION exp
+    (17) exp -> exp . MODULO exp
+    (18) exp -> exp . GREATERTHAN exp
+    (19) exp -> exp . LESSTHAN exp
+    (20) exp -> exp . GREATERTHANOREQUALTO exp
+    (21) exp -> exp . LESSTHANOREQUALTO exp
+    (22) exp -> exp . EQUALTO exp
+    (23) exp -> exp . NOTEQUALTO exp
+    (24) exp -> exp . COMMA exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
+    (27) exp -> exp . POW exp
+    (28) exp -> exp . INCREMENT
+    (29) exp -> exp . DECREMENT
+    (30) exp -> exp . NOT
+
+    RPAREN          shift and go to state 61
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    COMMA           shift and go to state 59
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
+
+
+state 42
 
     (4) stmt -> PRINT exp COMMA exp . SEMICOL
     (24) exp -> exp COMMA exp .
@@ -1416,25 +1515,25 @@ state 39
   ! shift/reduce conflict for INCREMENT resolved as shift
   ! shift/reduce conflict for DECREMENT resolved as shift
   ! shift/reduce conflict for NOT resolved as shift
-    SEMICOL         shift and go to state 58
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    COMMA           shift and go to state 56
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    SEMICOL         shift and go to state 62
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    COMMA           shift and go to state 59
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
   ! COMMA           [ reduce using rule 24 (exp -> exp COMMA exp .) ]
   ! SEMICOL         [ reduce using rule 24 (exp -> exp COMMA exp .) ]
@@ -1457,7 +1556,7 @@ state 39
   ! NOT             [ reduce using rule 24 (exp -> exp COMMA exp .) ]
 
 
-state 40
+state 43
 
     (13) exp -> exp PLUS exp .
     (13) exp -> exp . PLUS exp
@@ -1482,23 +1581,23 @@ state 40
     COMMA           reduce using rule 13 (exp -> exp PLUS exp .)
     SEMICOL         reduce using rule 13 (exp -> exp PLUS exp .)
     RPAREN          reduce using rule 13 (exp -> exp PLUS exp .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
   ! PLUS            [ reduce using rule 13 (exp -> exp PLUS exp .) ]
   ! MINUS           [ reduce using rule 13 (exp -> exp PLUS exp .) ]
@@ -1517,10 +1616,10 @@ state 40
   ! INCREMENT       [ reduce using rule 13 (exp -> exp PLUS exp .) ]
   ! DECREMENT       [ reduce using rule 13 (exp -> exp PLUS exp .) ]
   ! NOT             [ reduce using rule 13 (exp -> exp PLUS exp .) ]
-  ! COMMA           [ shift and go to state 56 ]
+  ! COMMA           [ shift and go to state 59 ]
 
 
-state 41
+state 44
 
     (14) exp -> exp MINUS exp .
     (13) exp -> exp . PLUS exp
@@ -1545,23 +1644,23 @@ state 41
     COMMA           reduce using rule 14 (exp -> exp MINUS exp .)
     SEMICOL         reduce using rule 14 (exp -> exp MINUS exp .)
     RPAREN          reduce using rule 14 (exp -> exp MINUS exp .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
   ! PLUS            [ reduce using rule 14 (exp -> exp MINUS exp .) ]
   ! MINUS           [ reduce using rule 14 (exp -> exp MINUS exp .) ]
@@ -1580,10 +1679,10 @@ state 41
   ! INCREMENT       [ reduce using rule 14 (exp -> exp MINUS exp .) ]
   ! DECREMENT       [ reduce using rule 14 (exp -> exp MINUS exp .) ]
   ! NOT             [ reduce using rule 14 (exp -> exp MINUS exp .) ]
-  ! COMMA           [ shift and go to state 56 ]
+  ! COMMA           [ shift and go to state 59 ]
 
 
-state 42
+state 45
 
     (15) exp -> exp MULTIPLICATION exp .
     (13) exp -> exp . PLUS exp
@@ -1608,23 +1707,23 @@ state 42
     COMMA           reduce using rule 15 (exp -> exp MULTIPLICATION exp .)
     SEMICOL         reduce using rule 15 (exp -> exp MULTIPLICATION exp .)
     RPAREN          reduce using rule 15 (exp -> exp MULTIPLICATION exp .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
   ! PLUS            [ reduce using rule 15 (exp -> exp MULTIPLICATION exp .) ]
   ! MINUS           [ reduce using rule 15 (exp -> exp MULTIPLICATION exp .) ]
@@ -1643,10 +1742,10 @@ state 42
   ! INCREMENT       [ reduce using rule 15 (exp -> exp MULTIPLICATION exp .) ]
   ! DECREMENT       [ reduce using rule 15 (exp -> exp MULTIPLICATION exp .) ]
   ! NOT             [ reduce using rule 15 (exp -> exp MULTIPLICATION exp .) ]
-  ! COMMA           [ shift and go to state 56 ]
+  ! COMMA           [ shift and go to state 59 ]
 
 
-state 43
+state 46
 
     (16) exp -> exp DIVISION exp .
     (13) exp -> exp . PLUS exp
@@ -1671,23 +1770,23 @@ state 43
     COMMA           reduce using rule 16 (exp -> exp DIVISION exp .)
     SEMICOL         reduce using rule 16 (exp -> exp DIVISION exp .)
     RPAREN          reduce using rule 16 (exp -> exp DIVISION exp .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
   ! PLUS            [ reduce using rule 16 (exp -> exp DIVISION exp .) ]
   ! MINUS           [ reduce using rule 16 (exp -> exp DIVISION exp .) ]
@@ -1706,10 +1805,10 @@ state 43
   ! INCREMENT       [ reduce using rule 16 (exp -> exp DIVISION exp .) ]
   ! DECREMENT       [ reduce using rule 16 (exp -> exp DIVISION exp .) ]
   ! NOT             [ reduce using rule 16 (exp -> exp DIVISION exp .) ]
-  ! COMMA           [ shift and go to state 56 ]
+  ! COMMA           [ shift and go to state 59 ]
 
 
-state 44
+state 47
 
     (17) exp -> exp MODULO exp .
     (13) exp -> exp . PLUS exp
@@ -1734,23 +1833,23 @@ state 44
     COMMA           reduce using rule 17 (exp -> exp MODULO exp .)
     SEMICOL         reduce using rule 17 (exp -> exp MODULO exp .)
     RPAREN          reduce using rule 17 (exp -> exp MODULO exp .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
   ! PLUS            [ reduce using rule 17 (exp -> exp MODULO exp .) ]
   ! MINUS           [ reduce using rule 17 (exp -> exp MODULO exp .) ]
@@ -1769,10 +1868,10 @@ state 44
   ! INCREMENT       [ reduce using rule 17 (exp -> exp MODULO exp .) ]
   ! DECREMENT       [ reduce using rule 17 (exp -> exp MODULO exp .) ]
   ! NOT             [ reduce using rule 17 (exp -> exp MODULO exp .) ]
-  ! COMMA           [ shift and go to state 56 ]
+  ! COMMA           [ shift and go to state 59 ]
 
 
-state 45
+state 48
 
     (18) exp -> exp GREATERTHAN exp .
     (13) exp -> exp . PLUS exp
@@ -1797,23 +1896,23 @@ state 45
     COMMA           reduce using rule 18 (exp -> exp GREATERTHAN exp .)
     SEMICOL         reduce using rule 18 (exp -> exp GREATERTHAN exp .)
     RPAREN          reduce using rule 18 (exp -> exp GREATERTHAN exp .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
   ! PLUS            [ reduce using rule 18 (exp -> exp GREATERTHAN exp .) ]
   ! MINUS           [ reduce using rule 18 (exp -> exp GREATERTHAN exp .) ]
@@ -1832,10 +1931,10 @@ state 45
   ! INCREMENT       [ reduce using rule 18 (exp -> exp GREATERTHAN exp .) ]
   ! DECREMENT       [ reduce using rule 18 (exp -> exp GREATERTHAN exp .) ]
   ! NOT             [ reduce using rule 18 (exp -> exp GREATERTHAN exp .) ]
-  ! COMMA           [ shift and go to state 56 ]
+  ! COMMA           [ shift and go to state 59 ]
 
 
-state 46
+state 49
 
     (19) exp -> exp LESSTHAN exp .
     (13) exp -> exp . PLUS exp
@@ -1860,23 +1959,23 @@ state 46
     COMMA           reduce using rule 19 (exp -> exp LESSTHAN exp .)
     SEMICOL         reduce using rule 19 (exp -> exp LESSTHAN exp .)
     RPAREN          reduce using rule 19 (exp -> exp LESSTHAN exp .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
   ! PLUS            [ reduce using rule 19 (exp -> exp LESSTHAN exp .) ]
   ! MINUS           [ reduce using rule 19 (exp -> exp LESSTHAN exp .) ]
@@ -1895,10 +1994,10 @@ state 46
   ! INCREMENT       [ reduce using rule 19 (exp -> exp LESSTHAN exp .) ]
   ! DECREMENT       [ reduce using rule 19 (exp -> exp LESSTHAN exp .) ]
   ! NOT             [ reduce using rule 19 (exp -> exp LESSTHAN exp .) ]
-  ! COMMA           [ shift and go to state 56 ]
+  ! COMMA           [ shift and go to state 59 ]
 
 
-state 47
+state 50
 
     (20) exp -> exp GREATERTHANOREQUALTO exp .
     (13) exp -> exp . PLUS exp
@@ -1923,23 +2022,23 @@ state 47
     COMMA           reduce using rule 20 (exp -> exp GREATERTHANOREQUALTO exp .)
     SEMICOL         reduce using rule 20 (exp -> exp GREATERTHANOREQUALTO exp .)
     RPAREN          reduce using rule 20 (exp -> exp GREATERTHANOREQUALTO exp .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
   ! PLUS            [ reduce using rule 20 (exp -> exp GREATERTHANOREQUALTO exp .) ]
   ! MINUS           [ reduce using rule 20 (exp -> exp GREATERTHANOREQUALTO exp .) ]
@@ -1958,10 +2057,10 @@ state 47
   ! INCREMENT       [ reduce using rule 20 (exp -> exp GREATERTHANOREQUALTO exp .) ]
   ! DECREMENT       [ reduce using rule 20 (exp -> exp GREATERTHANOREQUALTO exp .) ]
   ! NOT             [ reduce using rule 20 (exp -> exp GREATERTHANOREQUALTO exp .) ]
-  ! COMMA           [ shift and go to state 56 ]
+  ! COMMA           [ shift and go to state 59 ]
 
 
-state 48
+state 51
 
     (21) exp -> exp LESSTHANOREQUALTO exp .
     (13) exp -> exp . PLUS exp
@@ -1986,23 +2085,23 @@ state 48
     COMMA           reduce using rule 21 (exp -> exp LESSTHANOREQUALTO exp .)
     SEMICOL         reduce using rule 21 (exp -> exp LESSTHANOREQUALTO exp .)
     RPAREN          reduce using rule 21 (exp -> exp LESSTHANOREQUALTO exp .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
   ! PLUS            [ reduce using rule 21 (exp -> exp LESSTHANOREQUALTO exp .) ]
   ! MINUS           [ reduce using rule 21 (exp -> exp LESSTHANOREQUALTO exp .) ]
@@ -2021,10 +2120,10 @@ state 48
   ! INCREMENT       [ reduce using rule 21 (exp -> exp LESSTHANOREQUALTO exp .) ]
   ! DECREMENT       [ reduce using rule 21 (exp -> exp LESSTHANOREQUALTO exp .) ]
   ! NOT             [ reduce using rule 21 (exp -> exp LESSTHANOREQUALTO exp .) ]
-  ! COMMA           [ shift and go to state 56 ]
+  ! COMMA           [ shift and go to state 59 ]
 
 
-state 49
+state 52
 
     (22) exp -> exp EQUALTO exp .
     (13) exp -> exp . PLUS exp
@@ -2049,23 +2148,23 @@ state 49
     COMMA           reduce using rule 22 (exp -> exp EQUALTO exp .)
     SEMICOL         reduce using rule 22 (exp -> exp EQUALTO exp .)
     RPAREN          reduce using rule 22 (exp -> exp EQUALTO exp .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
   ! PLUS            [ reduce using rule 22 (exp -> exp EQUALTO exp .) ]
   ! MINUS           [ reduce using rule 22 (exp -> exp EQUALTO exp .) ]
@@ -2084,10 +2183,10 @@ state 49
   ! INCREMENT       [ reduce using rule 22 (exp -> exp EQUALTO exp .) ]
   ! DECREMENT       [ reduce using rule 22 (exp -> exp EQUALTO exp .) ]
   ! NOT             [ reduce using rule 22 (exp -> exp EQUALTO exp .) ]
-  ! COMMA           [ shift and go to state 56 ]
+  ! COMMA           [ shift and go to state 59 ]
 
 
-state 50
+state 53
 
     (23) exp -> exp NOTEQUALTO exp .
     (13) exp -> exp . PLUS exp
@@ -2112,23 +2211,23 @@ state 50
     COMMA           reduce using rule 23 (exp -> exp NOTEQUALTO exp .)
     SEMICOL         reduce using rule 23 (exp -> exp NOTEQUALTO exp .)
     RPAREN          reduce using rule 23 (exp -> exp NOTEQUALTO exp .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
   ! PLUS            [ reduce using rule 23 (exp -> exp NOTEQUALTO exp .) ]
   ! MINUS           [ reduce using rule 23 (exp -> exp NOTEQUALTO exp .) ]
@@ -2147,10 +2246,10 @@ state 50
   ! INCREMENT       [ reduce using rule 23 (exp -> exp NOTEQUALTO exp .) ]
   ! DECREMENT       [ reduce using rule 23 (exp -> exp NOTEQUALTO exp .) ]
   ! NOT             [ reduce using rule 23 (exp -> exp NOTEQUALTO exp .) ]
-  ! COMMA           [ shift and go to state 56 ]
+  ! COMMA           [ shift and go to state 59 ]
 
 
-state 51
+state 54
 
     (25) exp -> exp AND exp .
     (13) exp -> exp . PLUS exp
@@ -2175,23 +2274,23 @@ state 51
     COMMA           reduce using rule 25 (exp -> exp AND exp .)
     SEMICOL         reduce using rule 25 (exp -> exp AND exp .)
     RPAREN          reduce using rule 25 (exp -> exp AND exp .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
   ! PLUS            [ reduce using rule 25 (exp -> exp AND exp .) ]
   ! MINUS           [ reduce using rule 25 (exp -> exp AND exp .) ]
@@ -2210,10 +2309,10 @@ state 51
   ! INCREMENT       [ reduce using rule 25 (exp -> exp AND exp .) ]
   ! DECREMENT       [ reduce using rule 25 (exp -> exp AND exp .) ]
   ! NOT             [ reduce using rule 25 (exp -> exp AND exp .) ]
-  ! COMMA           [ shift and go to state 56 ]
+  ! COMMA           [ shift and go to state 59 ]
 
 
-state 52
+state 55
 
     (26) exp -> exp OR exp .
     (13) exp -> exp . PLUS exp
@@ -2238,23 +2337,23 @@ state 52
     COMMA           reduce using rule 26 (exp -> exp OR exp .)
     SEMICOL         reduce using rule 26 (exp -> exp OR exp .)
     RPAREN          reduce using rule 26 (exp -> exp OR exp .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
   ! PLUS            [ reduce using rule 26 (exp -> exp OR exp .) ]
   ! MINUS           [ reduce using rule 26 (exp -> exp OR exp .) ]
@@ -2273,10 +2372,10 @@ state 52
   ! INCREMENT       [ reduce using rule 26 (exp -> exp OR exp .) ]
   ! DECREMENT       [ reduce using rule 26 (exp -> exp OR exp .) ]
   ! NOT             [ reduce using rule 26 (exp -> exp OR exp .) ]
-  ! COMMA           [ shift and go to state 56 ]
+  ! COMMA           [ shift and go to state 59 ]
 
 
-state 53
+state 56
 
     (27) exp -> exp POW exp .
     (13) exp -> exp . PLUS exp
@@ -2301,23 +2400,23 @@ state 53
     COMMA           reduce using rule 27 (exp -> exp POW exp .)
     SEMICOL         reduce using rule 27 (exp -> exp POW exp .)
     RPAREN          reduce using rule 27 (exp -> exp POW exp .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
   ! PLUS            [ reduce using rule 27 (exp -> exp POW exp .) ]
   ! MINUS           [ reduce using rule 27 (exp -> exp POW exp .) ]
@@ -2336,10 +2435,10 @@ state 53
   ! INCREMENT       [ reduce using rule 27 (exp -> exp POW exp .) ]
   ! DECREMENT       [ reduce using rule 27 (exp -> exp POW exp .) ]
   ! NOT             [ reduce using rule 27 (exp -> exp POW exp .) ]
-  ! COMMA           [ shift and go to state 56 ]
+  ! COMMA           [ shift and go to state 59 ]
 
 
-state 54
+state 57
 
     (3) exp -> LPAREN exp . RPAREN
     (13) exp -> exp . PLUS exp
@@ -2361,28 +2460,28 @@ state 54
     (29) exp -> exp . DECREMENT
     (30) exp -> exp . NOT
 
-    RPAREN          shift and go to state 59
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    COMMA           shift and go to state 56
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    RPAREN          shift and go to state 63
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    COMMA           shift and go to state 59
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
 
-state 55
+state 58
 
     (6) stmt -> PRINT LPAREN exp RPAREN . SEMICOL
     (3) exp -> LPAREN exp RPAREN .
@@ -2407,10 +2506,10 @@ state 55
     DECREMENT       reduce using rule 3 (exp -> LPAREN exp RPAREN .)
     NOT             reduce using rule 3 (exp -> LPAREN exp RPAREN .)
 
-  ! SEMICOL         [ shift and go to state 60 ]
+  ! SEMICOL         [ shift and go to state 64 ]
 
 
-state 56
+state 59
 
     (24) exp -> exp COMMA . exp
     (3) exp -> . LPAREN exp RPAREN
@@ -2440,18 +2539,18 @@ state 56
     (31) exp -> . STRING
     (32) exp -> . MINUS exp
 
-    LPAREN          shift and go to state 35
-    FLOAT           shift and go to state 8
-    INT             shift and go to state 9
-    BOOL            shift and go to state 10
-    CHAR            shift and go to state 11
-    NAME            shift and go to state 12
-    STRING          shift and go to state 14
-    MINUS           shift and go to state 13
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
 
-    exp                            shift and go to state 61
+    exp                            shift and go to state 65
 
-state 57
+state 60
 
     (7) stmt -> VARTYPE NAME ASSIGN exp . SEMICOL
     (13) exp -> exp . PLUS exp
@@ -2473,37 +2572,46 @@ state 57
     (29) exp -> exp . DECREMENT
     (30) exp -> exp . NOT
 
-    SEMICOL         shift and go to state 62
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    COMMA           shift and go to state 56
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    SEMICOL         shift and go to state 66
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    COMMA           shift and go to state 59
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
 
-state 58
+state 61
+
+    (33) stmt -> IF LPAREN exp RPAREN . LCURLY S RCURLY block
+
+    LCURLY          shift and go to state 67
+
+
+state 62
 
     (4) stmt -> PRINT exp COMMA exp SEMICOL .
 
     PRINT           reduce using rule 4 (stmt -> PRINT exp COMMA exp SEMICOL .)
     VARTYPE         reduce using rule 4 (stmt -> PRINT exp COMMA exp SEMICOL .)
+    IF              reduce using rule 4 (stmt -> PRINT exp COMMA exp SEMICOL .)
     $end            reduce using rule 4 (stmt -> PRINT exp COMMA exp SEMICOL .)
+    RCURLY          reduce using rule 4 (stmt -> PRINT exp COMMA exp SEMICOL .)
 
 
-state 59
+state 63
 
     (3) exp -> LPAREN exp RPAREN .
 
@@ -2529,16 +2637,18 @@ state 59
     SEMICOL         reduce using rule 3 (exp -> LPAREN exp RPAREN .)
 
 
-state 60
+state 64
 
     (6) stmt -> PRINT LPAREN exp RPAREN SEMICOL .
 
     PRINT           reduce using rule 6 (stmt -> PRINT LPAREN exp RPAREN SEMICOL .)
     VARTYPE         reduce using rule 6 (stmt -> PRINT LPAREN exp RPAREN SEMICOL .)
+    IF              reduce using rule 6 (stmt -> PRINT LPAREN exp RPAREN SEMICOL .)
     $end            reduce using rule 6 (stmt -> PRINT LPAREN exp RPAREN SEMICOL .)
+    RCURLY          reduce using rule 6 (stmt -> PRINT LPAREN exp RPAREN SEMICOL .)
 
 
-state 61
+state 65
 
     (24) exp -> exp COMMA exp .
     (13) exp -> exp . PLUS exp
@@ -2580,24 +2690,24 @@ state 61
   ! shift/reduce conflict for NOT resolved as shift
     RPAREN          reduce using rule 24 (exp -> exp COMMA exp .)
     SEMICOL         reduce using rule 24 (exp -> exp COMMA exp .)
-    PLUS            shift and go to state 18
-    MINUS           shift and go to state 19
-    MULTIPLICATION  shift and go to state 20
-    DIVISION        shift and go to state 21
-    MODULO          shift and go to state 22
-    GREATERTHAN     shift and go to state 23
-    LESSTHAN        shift and go to state 24
-    GREATERTHANOREQUALTO shift and go to state 25
-    LESSTHANOREQUALTO shift and go to state 26
-    EQUALTO         shift and go to state 27
-    NOTEQUALTO      shift and go to state 28
-    COMMA           shift and go to state 56
-    AND             shift and go to state 29
-    OR              shift and go to state 30
-    POW             shift and go to state 31
-    INCREMENT       shift and go to state 32
-    DECREMENT       shift and go to state 33
-    NOT             shift and go to state 34
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    COMMA           shift and go to state 59
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
 
   ! PLUS            [ reduce using rule 24 (exp -> exp COMMA exp .) ]
   ! MINUS           [ reduce using rule 24 (exp -> exp COMMA exp .) ]
@@ -2619,51 +2729,303 @@ state 61
   ! NOT             [ reduce using rule 24 (exp -> exp COMMA exp .) ]
 
 
-state 62
+state 66
 
     (7) stmt -> VARTYPE NAME ASSIGN exp SEMICOL .
 
     PRINT           reduce using rule 7 (stmt -> VARTYPE NAME ASSIGN exp SEMICOL .)
     VARTYPE         reduce using rule 7 (stmt -> VARTYPE NAME ASSIGN exp SEMICOL .)
+    IF              reduce using rule 7 (stmt -> VARTYPE NAME ASSIGN exp SEMICOL .)
     $end            reduce using rule 7 (stmt -> VARTYPE NAME ASSIGN exp SEMICOL .)
+    RCURLY          reduce using rule 7 (stmt -> VARTYPE NAME ASSIGN exp SEMICOL .)
+
+
+state 67
+
+    (33) stmt -> IF LPAREN exp RPAREN LCURLY . S RCURLY block
+    (1) S -> . stmt S
+    (2) S -> .
+    (4) stmt -> . PRINT exp COMMA exp SEMICOL
+    (5) stmt -> . PRINT exp SEMICOL
+    (6) stmt -> . PRINT LPAREN exp RPAREN SEMICOL
+    (7) stmt -> . VARTYPE NAME ASSIGN exp SEMICOL
+    (33) stmt -> . IF LPAREN exp RPAREN LCURLY S RCURLY block
+
+    RCURLY          reduce using rule 2 (S -> .)
+    PRINT           shift and go to state 3
+    VARTYPE         shift and go to state 4
+    IF              shift and go to state 5
+
+    S                              shift and go to state 68
+    stmt                           shift and go to state 2
+
+state 68
+
+    (33) stmt -> IF LPAREN exp RPAREN LCURLY S . RCURLY block
+
+    RCURLY          shift and go to state 69
+
+
+state 69
+
+    (33) stmt -> IF LPAREN exp RPAREN LCURLY S RCURLY . block
+    (34) block -> . ELSEIF LPAREN exp RPAREN LCURLY S RCURLY block
+    (35) block -> . ELSE LCURLY S RCURLY
+    (36) block -> .
+
+    ELSEIF          shift and go to state 71
+    ELSE            shift and go to state 72
+    PRINT           reduce using rule 36 (block -> .)
+    VARTYPE         reduce using rule 36 (block -> .)
+    IF              reduce using rule 36 (block -> .)
+    $end            reduce using rule 36 (block -> .)
+    RCURLY          reduce using rule 36 (block -> .)
+
+    block                          shift and go to state 70
+
+state 70
+
+    (33) stmt -> IF LPAREN exp RPAREN LCURLY S RCURLY block .
+
+    PRINT           reduce using rule 33 (stmt -> IF LPAREN exp RPAREN LCURLY S RCURLY block .)
+    VARTYPE         reduce using rule 33 (stmt -> IF LPAREN exp RPAREN LCURLY S RCURLY block .)
+    IF              reduce using rule 33 (stmt -> IF LPAREN exp RPAREN LCURLY S RCURLY block .)
+    $end            reduce using rule 33 (stmt -> IF LPAREN exp RPAREN LCURLY S RCURLY block .)
+    RCURLY          reduce using rule 33 (stmt -> IF LPAREN exp RPAREN LCURLY S RCURLY block .)
+
+
+state 71
+
+    (34) block -> ELSEIF . LPAREN exp RPAREN LCURLY S RCURLY block
+
+    LPAREN          shift and go to state 73
+
+
+state 72
+
+    (35) block -> ELSE . LCURLY S RCURLY
+
+    LCURLY          shift and go to state 74
+
+
+state 73
+
+    (34) block -> ELSEIF LPAREN . exp RPAREN LCURLY S RCURLY block
+    (3) exp -> . LPAREN exp RPAREN
+    (8) exp -> . FLOAT
+    (9) exp -> . INT
+    (10) exp -> . BOOL
+    (11) exp -> . CHAR
+    (12) exp -> . NAME
+    (13) exp -> . exp PLUS exp
+    (14) exp -> . exp MINUS exp
+    (15) exp -> . exp MULTIPLICATION exp
+    (16) exp -> . exp DIVISION exp
+    (17) exp -> . exp MODULO exp
+    (18) exp -> . exp GREATERTHAN exp
+    (19) exp -> . exp LESSTHAN exp
+    (20) exp -> . exp GREATERTHANOREQUALTO exp
+    (21) exp -> . exp LESSTHANOREQUALTO exp
+    (22) exp -> . exp EQUALTO exp
+    (23) exp -> . exp NOTEQUALTO exp
+    (24) exp -> . exp COMMA exp
+    (25) exp -> . exp AND exp
+    (26) exp -> . exp OR exp
+    (27) exp -> . exp POW exp
+    (28) exp -> . exp INCREMENT
+    (29) exp -> . exp DECREMENT
+    (30) exp -> . exp NOT
+    (31) exp -> . STRING
+    (32) exp -> . MINUS exp
+
+    LPAREN          shift and go to state 37
+    FLOAT           shift and go to state 9
+    INT             shift and go to state 10
+    BOOL            shift and go to state 11
+    CHAR            shift and go to state 12
+    NAME            shift and go to state 13
+    STRING          shift and go to state 15
+    MINUS           shift and go to state 14
+
+    exp                            shift and go to state 75
+
+state 74
+
+    (35) block -> ELSE LCURLY . S RCURLY
+    (1) S -> . stmt S
+    (2) S -> .
+    (4) stmt -> . PRINT exp COMMA exp SEMICOL
+    (5) stmt -> . PRINT exp SEMICOL
+    (6) stmt -> . PRINT LPAREN exp RPAREN SEMICOL
+    (7) stmt -> . VARTYPE NAME ASSIGN exp SEMICOL
+    (33) stmt -> . IF LPAREN exp RPAREN LCURLY S RCURLY block
+
+    RCURLY          reduce using rule 2 (S -> .)
+    PRINT           shift and go to state 3
+    VARTYPE         shift and go to state 4
+    IF              shift and go to state 5
+
+    S                              shift and go to state 76
+    stmt                           shift and go to state 2
+
+state 75
+
+    (34) block -> ELSEIF LPAREN exp . RPAREN LCURLY S RCURLY block
+    (13) exp -> exp . PLUS exp
+    (14) exp -> exp . MINUS exp
+    (15) exp -> exp . MULTIPLICATION exp
+    (16) exp -> exp . DIVISION exp
+    (17) exp -> exp . MODULO exp
+    (18) exp -> exp . GREATERTHAN exp
+    (19) exp -> exp . LESSTHAN exp
+    (20) exp -> exp . GREATERTHANOREQUALTO exp
+    (21) exp -> exp . LESSTHANOREQUALTO exp
+    (22) exp -> exp . EQUALTO exp
+    (23) exp -> exp . NOTEQUALTO exp
+    (24) exp -> exp . COMMA exp
+    (25) exp -> exp . AND exp
+    (26) exp -> exp . OR exp
+    (27) exp -> exp . POW exp
+    (28) exp -> exp . INCREMENT
+    (29) exp -> exp . DECREMENT
+    (30) exp -> exp . NOT
+
+    RPAREN          shift and go to state 77
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 21
+    MULTIPLICATION  shift and go to state 22
+    DIVISION        shift and go to state 23
+    MODULO          shift and go to state 24
+    GREATERTHAN     shift and go to state 25
+    LESSTHAN        shift and go to state 26
+    GREATERTHANOREQUALTO shift and go to state 27
+    LESSTHANOREQUALTO shift and go to state 28
+    EQUALTO         shift and go to state 29
+    NOTEQUALTO      shift and go to state 30
+    COMMA           shift and go to state 59
+    AND             shift and go to state 31
+    OR              shift and go to state 32
+    POW             shift and go to state 33
+    INCREMENT       shift and go to state 34
+    DECREMENT       shift and go to state 35
+    NOT             shift and go to state 36
+
+
+state 76
+
+    (35) block -> ELSE LCURLY S . RCURLY
+
+    RCURLY          shift and go to state 78
+
+
+state 77
+
+    (34) block -> ELSEIF LPAREN exp RPAREN . LCURLY S RCURLY block
+
+    LCURLY          shift and go to state 79
+
+
+state 78
+
+    (35) block -> ELSE LCURLY S RCURLY .
+
+    PRINT           reduce using rule 35 (block -> ELSE LCURLY S RCURLY .)
+    VARTYPE         reduce using rule 35 (block -> ELSE LCURLY S RCURLY .)
+    IF              reduce using rule 35 (block -> ELSE LCURLY S RCURLY .)
+    $end            reduce using rule 35 (block -> ELSE LCURLY S RCURLY .)
+    RCURLY          reduce using rule 35 (block -> ELSE LCURLY S RCURLY .)
+
+
+state 79
+
+    (34) block -> ELSEIF LPAREN exp RPAREN LCURLY . S RCURLY block
+    (1) S -> . stmt S
+    (2) S -> .
+    (4) stmt -> . PRINT exp COMMA exp SEMICOL
+    (5) stmt -> . PRINT exp SEMICOL
+    (6) stmt -> . PRINT LPAREN exp RPAREN SEMICOL
+    (7) stmt -> . VARTYPE NAME ASSIGN exp SEMICOL
+    (33) stmt -> . IF LPAREN exp RPAREN LCURLY S RCURLY block
+
+    RCURLY          reduce using rule 2 (S -> .)
+    PRINT           shift and go to state 3
+    VARTYPE         shift and go to state 4
+    IF              shift and go to state 5
+
+    S                              shift and go to state 80
+    stmt                           shift and go to state 2
+
+state 80
+
+    (34) block -> ELSEIF LPAREN exp RPAREN LCURLY S . RCURLY block
+
+    RCURLY          shift and go to state 81
+
+
+state 81
+
+    (34) block -> ELSEIF LPAREN exp RPAREN LCURLY S RCURLY . block
+    (34) block -> . ELSEIF LPAREN exp RPAREN LCURLY S RCURLY block
+    (35) block -> . ELSE LCURLY S RCURLY
+    (36) block -> .
+
+    ELSEIF          shift and go to state 71
+    ELSE            shift and go to state 72
+    PRINT           reduce using rule 36 (block -> .)
+    VARTYPE         reduce using rule 36 (block -> .)
+    IF              reduce using rule 36 (block -> .)
+    $end            reduce using rule 36 (block -> .)
+    RCURLY          reduce using rule 36 (block -> .)
+
+    block                          shift and go to state 82
+
+state 82
+
+    (34) block -> ELSEIF LPAREN exp RPAREN LCURLY S RCURLY block .
+
+    PRINT           reduce using rule 34 (block -> ELSEIF LPAREN exp RPAREN LCURLY S RCURLY block .)
+    VARTYPE         reduce using rule 34 (block -> ELSEIF LPAREN exp RPAREN LCURLY S RCURLY block .)
+    IF              reduce using rule 34 (block -> ELSEIF LPAREN exp RPAREN LCURLY S RCURLY block .)
+    $end            reduce using rule 34 (block -> ELSEIF LPAREN exp RPAREN LCURLY S RCURLY block .)
+    RCURLY          reduce using rule 34 (block -> ELSEIF LPAREN exp RPAREN LCURLY S RCURLY block .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for SEMICOL in state 39 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 39 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 39 resolved as shift
-WARNING: shift/reduce conflict for MULTIPLICATION in state 39 resolved as shift
-WARNING: shift/reduce conflict for DIVISION in state 39 resolved as shift
-WARNING: shift/reduce conflict for MODULO in state 39 resolved as shift
-WARNING: shift/reduce conflict for GREATERTHAN in state 39 resolved as shift
-WARNING: shift/reduce conflict for LESSTHAN in state 39 resolved as shift
-WARNING: shift/reduce conflict for GREATERTHANOREQUALTO in state 39 resolved as shift
-WARNING: shift/reduce conflict for LESSTHANOREQUALTO in state 39 resolved as shift
-WARNING: shift/reduce conflict for EQUALTO in state 39 resolved as shift
-WARNING: shift/reduce conflict for NOTEQUALTO in state 39 resolved as shift
-WARNING: shift/reduce conflict for COMMA in state 39 resolved as shift
-WARNING: shift/reduce conflict for AND in state 39 resolved as shift
-WARNING: shift/reduce conflict for OR in state 39 resolved as shift
-WARNING: shift/reduce conflict for POW in state 39 resolved as shift
-WARNING: shift/reduce conflict for INCREMENT in state 39 resolved as shift
-WARNING: shift/reduce conflict for DECREMENT in state 39 resolved as shift
-WARNING: shift/reduce conflict for NOT in state 39 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 61 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 61 resolved as shift
-WARNING: shift/reduce conflict for MULTIPLICATION in state 61 resolved as shift
-WARNING: shift/reduce conflict for DIVISION in state 61 resolved as shift
-WARNING: shift/reduce conflict for MODULO in state 61 resolved as shift
-WARNING: shift/reduce conflict for GREATERTHAN in state 61 resolved as shift
-WARNING: shift/reduce conflict for LESSTHAN in state 61 resolved as shift
-WARNING: shift/reduce conflict for GREATERTHANOREQUALTO in state 61 resolved as shift
-WARNING: shift/reduce conflict for LESSTHANOREQUALTO in state 61 resolved as shift
-WARNING: shift/reduce conflict for EQUALTO in state 61 resolved as shift
-WARNING: shift/reduce conflict for NOTEQUALTO in state 61 resolved as shift
-WARNING: shift/reduce conflict for COMMA in state 61 resolved as shift
-WARNING: shift/reduce conflict for AND in state 61 resolved as shift
-WARNING: shift/reduce conflict for OR in state 61 resolved as shift
-WARNING: shift/reduce conflict for POW in state 61 resolved as shift
-WARNING: shift/reduce conflict for INCREMENT in state 61 resolved as shift
-WARNING: shift/reduce conflict for DECREMENT in state 61 resolved as shift
-WARNING: shift/reduce conflict for NOT in state 61 resolved as shift
+WARNING: shift/reduce conflict for SEMICOL in state 42 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 42 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 42 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLICATION in state 42 resolved as shift
+WARNING: shift/reduce conflict for DIVISION in state 42 resolved as shift
+WARNING: shift/reduce conflict for MODULO in state 42 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHAN in state 42 resolved as shift
+WARNING: shift/reduce conflict for LESSTHAN in state 42 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHANOREQUALTO in state 42 resolved as shift
+WARNING: shift/reduce conflict for LESSTHANOREQUALTO in state 42 resolved as shift
+WARNING: shift/reduce conflict for EQUALTO in state 42 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUALTO in state 42 resolved as shift
+WARNING: shift/reduce conflict for COMMA in state 42 resolved as shift
+WARNING: shift/reduce conflict for AND in state 42 resolved as shift
+WARNING: shift/reduce conflict for OR in state 42 resolved as shift
+WARNING: shift/reduce conflict for POW in state 42 resolved as shift
+WARNING: shift/reduce conflict for INCREMENT in state 42 resolved as shift
+WARNING: shift/reduce conflict for DECREMENT in state 42 resolved as shift
+WARNING: shift/reduce conflict for NOT in state 42 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 65 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 65 resolved as shift
+WARNING: shift/reduce conflict for MULTIPLICATION in state 65 resolved as shift
+WARNING: shift/reduce conflict for DIVISION in state 65 resolved as shift
+WARNING: shift/reduce conflict for MODULO in state 65 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHAN in state 65 resolved as shift
+WARNING: shift/reduce conflict for LESSTHAN in state 65 resolved as shift
+WARNING: shift/reduce conflict for GREATERTHANOREQUALTO in state 65 resolved as shift
+WARNING: shift/reduce conflict for LESSTHANOREQUALTO in state 65 resolved as shift
+WARNING: shift/reduce conflict for EQUALTO in state 65 resolved as shift
+WARNING: shift/reduce conflict for NOTEQUALTO in state 65 resolved as shift
+WARNING: shift/reduce conflict for COMMA in state 65 resolved as shift
+WARNING: shift/reduce conflict for AND in state 65 resolved as shift
+WARNING: shift/reduce conflict for OR in state 65 resolved as shift
+WARNING: shift/reduce conflict for POW in state 65 resolved as shift
+WARNING: shift/reduce conflict for INCREMENT in state 65 resolved as shift
+WARNING: shift/reduce conflict for DECREMENT in state 65 resolved as shift
+WARNING: shift/reduce conflict for NOT in state 65 resolved as shift

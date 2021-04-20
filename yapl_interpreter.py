@@ -141,11 +141,11 @@ def var_val(p):
     else:
         # print('here1')
         var_val(val)
-    
-
+        
 def stmt_eval(p):
     # print(p)
     stype = p[0]
+    # print(stype)
     if stype == 'PRINT':
         for i in range(1, len(p)):
             exp = p[i]
@@ -162,12 +162,26 @@ def stmt_eval(p):
             else:
                 print(exp_eval(exp), end=' ')
         print(end='\n')
+    elif stype == 'IF-ELSEIF-ELSE':
+        # print('here')
+        # print(exp_eval(p[1]))
+        # print(p[2])
+        # print(p[3][3][1])
+        # print(exp_eval(p[3][1]))
+        # print(p[5])
+        if exp_eval(p[1]) == True:
+            run_program(p[2])
+        elif exp_eval(p[3][1]) == True:
+            run_program(p[3][2])
+        else:
+            run_program(p[3][3][1])
     else:
         exp_assign(p)
         # print(variables)
 
 def run_program(p):
     for stmt in p:
+        # print ("stmt:", stmt)
         if stmt != None:
             stmt_eval(stmt)
             

@@ -1,6 +1,6 @@
 bool isRaining = false ;
-bool isSnowing = false ;
-int temperature = 46 ;
+bool isSnowing = true ;
+int temperature = 0 ;
 if (isRaining == true)
 {
     if(temperature > 45) {
@@ -13,7 +13,7 @@ if (isRaining == true)
         print("Wear fleece and raincoat");
     }
 }
-elseif (isSnowing == true)
+elseif (isSnowing != false)
 {
     if(temperature > 20) {
         print("Wear soft shell jacket");
@@ -26,5 +26,5 @@ elseif (isSnowing == true)
     }
 }
 else {
-    print ("It is hard to come up with interesting examples") ;
+    print("It is hard to come up with interesting examples");
 }

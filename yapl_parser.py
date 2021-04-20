@@ -109,6 +109,30 @@ def p_exp_uminus(p):
      'exp : MINUS exp %prec UMINUS'
      p[0] = ('UMINUS', p[2])
 
+def p_IF(p):
+    """
+    stmt : IF LPAREN exp RPAREN LCURLY S RCURLY block
+    """
+    p[0] = ('IF-ELSEIF-ELSE', p[3], p[6], p[8])
+    
+def p_ELSEIF(p):
+    """
+    block : ELSEIF LPAREN exp RPAREN LCURLY S RCURLY block
+    """
+    p[0] = ('IF-ELSEIF-ELSE', p[3], p[6], p[8])
+    
+def p_ELSE(p):
+    """
+    block : ELSE LCURLY S RCURLY
+    """
+    p[0] = ('IF-ELSEIF-ELSE', p[3])
+    
+def p_ELSE_EMPTY(p):
+    """
+    block : 
+    """
+    p[0] = []
+
 def p_error(p):
     print("Syntax error at token", p.value, p.type, p.lexpos)
     exit(1)
