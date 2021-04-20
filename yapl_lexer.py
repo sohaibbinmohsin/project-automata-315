@@ -34,11 +34,19 @@ tokens = [
     'IF',
     'ELSEIF',
     'ELSE',
-    'DOWHILE',
+    'DO',
+    'WHILE',
     'DEF',
     'ASSIGN',
     'COMMA',
-    'VARTYPE'
+    'VARTYPE',
+    'LSQB',
+    'RSQB',
+    'LIST',
+    'POP',
+    'PUSH',
+    'INDEX',
+    'SLICE'
 ]
 
 t_LPAREN = r'\('
@@ -67,9 +75,31 @@ t_ignore = '\t\r\n\f\v '
 t_ignore_COMMENT = r'\#.*'
 t_ASSIGN = r'\='
 t_COMMA = r'\,'
+t_LSQB = r'\['
+t_RSQB = r'\]'
 
 def t_VARTYPE(t):
     r'int|float|char|string|bool'
+    return t
+
+def t_POP(t):
+    r'.pop'
+    return t
+
+def t_PUSH(t):
+    r'.push'
+    return t
+
+def t_INDEX(t):
+    r'.index'
+    return t
+
+def t_SLICE(t):
+    r'.slice'
+    return t
+
+def t_LIST(t):
+    r'list'
     return t
 
 def t_FLOAT(t):
@@ -112,7 +142,9 @@ def t_NAME(t): #keywords
     elif t.value == 'else':
         t.type = 'ELSE'
     elif t.value == 'do':
-        t.type = 'DOWHILE'
+        t.type = 'DO'
+    elif t.value == 'while':
+        t.type = 'WHILE'
     elif t.value == 'def':
         t.type = 'DEF'
     else:

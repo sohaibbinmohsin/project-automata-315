@@ -51,6 +51,16 @@ def exp_eval(p):
         return not exp_eval(p[1])
     elif operator == 'UMINUS':
         return (- exp_eval(p[1]))
+    elif operator == 'POP':
+        return variables[p[1]][1].pop(p[2])
+    elif operator == 'PUSH':
+        # print(variables[p[1]][1])
+        return variables[p[1]][1].append(exp_eval(p[2]))
+    elif operator == 'INDEX' or operator == 'ACCESS':
+        return variables[p[1]][1][p[2]]
+    elif operator == 'SLICE':
+        x = slice(p[2], p[3])
+        return variables[p[1]][1][x]
     else:
         non_int = str(p[1])
         # non_int_ans = var_val(non_int)
@@ -61,6 +71,14 @@ def exp_eval(p):
             return p[1]
         else:
             return var_val(p[1])
+        
+def assign_list(p, var):
+    operator = p[0]
+    if operator == ",":
+        assign_list(p[1], var)
+        assign_list(p[2], var)
+    else:
+        variables[var][1].append(p[1])
     
 def var_check(p):
     # print(p)
@@ -131,9 +149,12 @@ def exp_assign(p):
     
     
 def var_val(p):
+    # print(p)
     val = variables[p][1]
     # print (val)
     # print(val in variables)
+    if variables[p][0] == 'list':
+        return val
     if not val in variables:
         # print('here')
         # print('val:', val)
@@ -158,6 +179,7 @@ def stmt_eval(p):
                     
                 # else:
                 #     print(exp, end=' ')
+                # print(exp[1][1])
                 print(var_val(exp[1][1]), end=' ')
             else:
                 print(exp_eval(exp), end=' ')
@@ -175,6 +197,26 @@ def stmt_eval(p):
             run_program(p[3][2])
         else:
             run_program(p[3][3][1])
+    elif stype == 'DOWHILE':
+        run_program(p[1])
+        while exp_eval(p[2][1]) == True:
+            run_program(p[1])
+    elif stype == 'ASSIGN-LIST':
+        # print(p[1])
+        # print(p[2])
+        # print(exp_eval(p[2]).split(" "))
+        # print(len(p[2]))
+        # variables[p[1]] = exp_eval(p[2]).split(" ")
+        variables[p[1]] = ('list', [])
+        assign_list(p[2], p[1])
+        # print(variables)
+    elif stype == 'ASSIGN-EMPTY-LIST':
+        variables[p[1]] = ('list', [])
+        # print(variables)
+    elif stype == 'POP' or stype == 'PUSH' or stype == 'INDEX' or stype == 'SLICE' or stype == 'ACCESS':
+        # variables[p[1]].pop(p[2])
+        exp_eval(p)
+        # print(variables)
     else:
         exp_assign(p)
         # print(variables)

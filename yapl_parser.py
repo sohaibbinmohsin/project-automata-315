@@ -43,6 +43,7 @@ def p_print_stmt(p):
 def p_var_assign(p):
     """
     stmt : VARTYPE NAME ASSIGN exp SEMICOL
+         | VARTYPE NAME ASSIGN stmt SEMICOL
     """
     p[0] = (p[2], p[1], p[4])
     
@@ -70,6 +71,43 @@ def p_exp_char(p):
     """
     p[0] = ('CHAR', p[1])
     
+def p_INCREMENT(p):
+    """
+    exp : NAME INCREMENT SEMICOL
+        | exp INCREMENT SEMICOL
+    """
+    p[0] = ('INCREMENT', p[1])
+    
+def p_LIST_ACCESS(p):
+    """
+    exp : NAME LSQB INT RSQB
+    """
+    p[0] = ('ACCESS', p[1], p[3])
+    
+def p_LIST_POP(p):
+    """
+    exp : NAME POP LPAREN INT RPAREN
+    """
+    p[0] = ('POP', p[1], p[4])
+    
+def p_LIST_INDEX(p):
+    """
+    exp : NAME INDEX LPAREN INT RPAREN
+    """
+    p[0] = ('INDEX', p[1], p[4])
+    
+def p_LIST_SLICE(p):
+    """
+    exp : NAME SLICE LPAREN INT COMMA INT RPAREN
+    """
+    p[0] = ('SLICE', p[1], p[4], p[6])
+    
+def p_LIST_PUSH(p):
+    """
+    stmt : NAME PUSH LPAREN exp RPAREN SEMICOL
+    """
+    p[0] = ('PUSH', p[1], p[4])
+    
 def p_exp_name(p):
     """
     exp : NAME
@@ -93,7 +131,6 @@ def p_exp_bin(p):
         | exp AND exp
         | exp OR exp
         | exp POW exp
-        | exp INCREMENT
         | exp DECREMENT
         | exp NOT
         | STRING
@@ -108,6 +145,16 @@ def p_exp_bin(p):
 def p_exp_uminus(p):
      'exp : MINUS exp %prec UMINUS'
      p[0] = ('UMINUS', p[2])
+     
+def p_LIST(p):
+    """
+    stmt : LIST NAME ASSIGN LSQB exp RSQB SEMICOL
+         | LIST NAME ASSIGN LSQB RSQB SEMICOL
+    """
+    if len(p) == 7:
+        p[0] = ('ASSIGN-EMPTY-LIST', p[2])
+    else:
+        p[0] = ('ASSIGN-LIST', p[2], p[5])
 
 def p_IF(p):
     """
@@ -132,6 +179,18 @@ def p_ELSE_EMPTY(p):
     block : 
     """
     p[0] = []
+    
+def p_DO(p):
+    """
+    stmt : DO LCURLY S RCURLY block_w
+    """
+    p[0] = ('DOWHILE', p[3], p[5])
+    
+def p_WHILE(p):
+    """
+    block_w : WHILE LPAREN exp RPAREN SEMICOL
+    """
+    p[0] = ('DOWHILE', p[3])
 
 def p_error(p):
     print("Syntax error at token", p.value, p.type, p.lexpos)
