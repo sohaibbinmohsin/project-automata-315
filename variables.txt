@@ -6,6 +6,6 @@ int e = 0;
 string f = "end";
 print(a);
 print(b, c);
-print(d, e;)
+print(d, e);
 print(f);
 int e = 5;
