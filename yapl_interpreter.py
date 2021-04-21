@@ -27,8 +27,9 @@ def exp_eval(p):
         return exp_eval(p[1]) % exp_eval(p[2])
     elif operator == '^':
         return exp_eval(p[1]) ** exp_eval(p[2])
-    elif operator == '++':
-        return exp_eval(p[1]) + 1
+    elif operator == 'INCREMENT':
+        variables[p[1]][1] += 1
+        return variables[p[1]][1]
     elif operator == '--':
         return exp_eval(p[1]) - 1
     elif operator == '<':
@@ -61,6 +62,11 @@ def exp_eval(p):
     elif operator == 'SLICE':
         x = slice(p[2], p[3])
         return variables[p[1]][1][x]
+    elif operator == 'ASSIGN':
+        # print('here')
+        # print(variables[p[1]])
+        variables[p[1]][1] = exp_eval(p[2])
+        return variables[p[1]][1]
     else:
         non_int = str(p[1])
         # non_int_ans = var_val(non_int)
@@ -213,10 +219,12 @@ def stmt_eval(p):
     elif stype == 'ASSIGN-EMPTY-LIST':
         variables[p[1]] = ('list', [])
         # print(variables)
-    elif stype == 'POP' or stype == 'PUSH' or stype == 'INDEX' or stype == 'SLICE' or stype == 'ACCESS':
+    elif stype == 'POP' or stype == 'PUSH' or stype == 'INDEX' or stype == 'SLICE' or stype == 'ACCESS' or stype == 'ASSIGN':
         # variables[p[1]].pop(p[2])
         exp_eval(p)
         # print(variables)
+    elif stype == 'INCREMENT':
+        exp_eval(p)
     else:
         exp_assign(p)
         # print(variables)
@@ -244,7 +252,7 @@ while True:
     for line in userIn.split('\n'):
         print(line)
         
-    print('===================================\n{OUTPUT}')
+    print('==========================================\n{OUTPUT}')
     try:
         run_program(parsed)
     except Exception as e:

@@ -1,15 +1,4 @@
-list a = [1.2,2,3,4,5];
-list b = [];
-int c = 1 + a.pop(1) ;
-b.push("hello");
-print(b.index(0));
-string d = b.index(0);
-print(a.slice(0,2));
-
-print(A.slice(0, 2));
-B.push("Get Ready!");
-B.push("Done!");
-print(B.index(1));
-string C = "Well " + B.pop(1);
-print(C);
-print(A[7]);
+int a = 1 ;
+print(a);
+a = 2;
+print(a);

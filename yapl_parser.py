@@ -44,8 +44,12 @@ def p_var_assign(p):
     """
     stmt : VARTYPE NAME ASSIGN exp SEMICOL
          | VARTYPE NAME ASSIGN stmt SEMICOL
+         | NAME ASSIGN exp SEMICOL
     """
-    p[0] = (p[2], p[1], p[4])
+    if len(p) == 5:
+        p[0] = ('ASSIGN', p[1], p[3])
+    else: 
+        p[0] = (p[2], p[1], p[4])
     
 def p_exp_float(p):
     """
@@ -73,8 +77,7 @@ def p_exp_char(p):
     
 def p_INCREMENT(p):
     """
-    exp : NAME INCREMENT SEMICOL
-        | exp INCREMENT SEMICOL
+    stmt : NAME INCREMENT SEMICOL
     """
     p[0] = ('INCREMENT', p[1])
     
