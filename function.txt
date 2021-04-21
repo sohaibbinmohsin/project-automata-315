@@ -1,7 +1,6 @@
-function fib(int n){
-    if ((n == 1) || (n==0)) {
-        return (n);
-    }
-    return (fib(n-1) + fib(n-2));
+int a = 1;
+print(a*5);
+function power2(int n){
+    return (n*n);
 }
-print(fib(9));
+print(power2(2));

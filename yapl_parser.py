@@ -4,17 +4,16 @@ from yapl_lexer import *
 #sys.tracebacklimit = 0 # to prevent traceback debug output since it is not needed
 
 precedence = (
-    (('right', 'UMINUS'),
     ('AND', 'OR', 'NOT'),
     ('left', 'EQUALTO', 'NOTEQUALTO'),
-    ('left', 'LESSTHANOREQUALTO', 'GREATERTHANOREQUALTO'),
-    ('left', 'LESSTHAN', 'GREATERTHAN'), 
-    ('left', 'INCREMENT', 'DECREMENT'),
-    ('left', 'MULTIPLICATION', 'DIVISION','MODULO'),
+    ('left', 'LESSTHAN', 'GREATERTHAN', 'GREATERTHANOREQUALTO','LESSTHANOREQUALTO'),
     ('left', 'PLUS', 'MINUS'),
+    ('left', 'MULTIPLICATION', 'DIVISION','MODULO'),
+    ('right', 'UMINUS'),
+    ('left', 'INCREMENT', 'DECREMENT'),
     ('left', 'POW'),
     ('left', 'LPAREN', 'RPAREN'),
-))
+)
 
 start = 'S'
 

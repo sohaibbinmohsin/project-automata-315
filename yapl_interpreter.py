@@ -12,11 +12,11 @@ def env_lookup(vname, env):
     else:
         return env_lookup(vname, env[0])
 
-def env_update(vname, val, env):
-    if vname in env[1]:
-        env[1][vname] = val
-    elif not (env[0] == None):
-        env_update(vname, val, env[0])
+# def env_update(vname, val, env):
+#     if vname in env[1]:
+#         env[1][vname] = val
+#     elif not (env[0] == None):
+#         env_update(vname, val, env[0])
 
 def exp_eval(p, environment):
     operator = p[0]
@@ -28,7 +28,7 @@ def exp_eval(p, environment):
         return exp_eval(p[1], environment)
     elif operator == 'CALL':
         # print('here')
-        return(stmt_eval(p, environment))
+        stmt_eval(p, environment)
     elif operator == '+':
         try:
             return exp_eval(p[1], environment) + exp_eval(p[2], environment)
@@ -40,7 +40,10 @@ def exp_eval(p, environment):
     elif operator == '-':
         return exp_eval(p[1], environment) - exp_eval(p[2], environment)
     elif operator == '*':
-        return exp_eval(p[1], environment) * exp_eval(p[2], environment)
+        # print('herem')
+        ans = exp_eval(p[1], environment) * exp_eval(p[2], environment)
+        # print(ans)
+        return ans
     elif operator == '/':
         return exp_eval(p[1], environment) / exp_eval(p[2], environment)
     elif operator == '%':
@@ -72,7 +75,10 @@ def exp_eval(p, environment):
     elif operator == 'NOT':
         return not exp_eval(p[1], environment)
     elif operator == 'RETURN':
-        return exp_eval(p[1], environment)
+        # print(p[1])
+        ans = exp_eval(p[1], environment)
+        # print(ans)
+        return ans
     elif operator == 'UMINUS':
         return (-1)*(exp_eval(p[1], environment))
     elif operator == 'POP':
@@ -114,6 +120,7 @@ def exp_eval(p, environment):
         if env_lookup(non_int, environment) == None:
             return p[1]
         else:
+            # print('here')
             return var_val(p[1], environment)
         
 def assign_list(p, var, environment):
@@ -207,7 +214,7 @@ def var_val(p, environment):
         return val
     else:
         # print('here1')
-        var_val(val, environment)
+        return var_val(val, environment)
         
 def stmt_eval(p, environment):
     # print(p)
@@ -230,6 +237,7 @@ def stmt_eval(p, environment):
                 print(var_val(exp[1][1], environment), end=' ')
             else:
                 print(exp_eval(exp, environment), end=' ')
+                # print('hereee')
         print(end='\n')
     elif stype == 'IF-ELSEIF-ELSE':
         # print('here')
@@ -283,6 +291,7 @@ def stmt_eval(p, environment):
         exp_eval(p, environment)
         # print(environment)
     elif stype == 'INCREMENT' or stype == 'DECREMENT' or stype == 'RETURN':
+        # print(p)
         exp_eval(p, environment)
     elif stype == 'CALL':
         # print('here')
@@ -314,7 +323,7 @@ def stmt_eval(p, environment):
                     p = list(param.keys())
                     # print('p:',p)
                     # print(p[i])
-                    new_env[1][p[i]] = ('int', arg_val)
+                    new_env[1][p[i]] = ['int', arg_val]
                     # print('new:',new_env)
                 try:
                     # print(body)
@@ -325,7 +334,7 @@ def stmt_eval(p, environment):
         else:
             print("call to non-function")
     elif stype == 'FUNCTION':
-        environment[1][p[1]] = ('function', {p[2][2]:(p[2][1],0)}, p[3], environment)
+        environment[1][p[1]] = ('function', {p[2][2]:[p[2][1],0]}, p[3], environment)
         # print(environment)
     else:
         exp_assign(p, environment)
