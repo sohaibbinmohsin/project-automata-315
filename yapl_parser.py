@@ -4,8 +4,17 @@ from yapl_lexer import *
 #sys.tracebacklimit = 0 # to prevent traceback debug output since it is not needed
 
 precedence = (
-    ('left', 'LPAREN', 'RPAREN'),('right', 'INCREMENT', 'DECREMENT', 'POW', 'MULTIPLICATION', 'DIVISION', 'MODULO', 'PLUS', 'MINUS', 'LESSTHAN', 'GREATERTHAN', 'LESSTHANOREQUALTO', 'GREATERTHANOREQUALTO', 'EQUALTO', 'NOTEQUALTO', 'AND', 'OR', 'NOT'), ('right', 'UMINUS'),
-)
+    (('right', 'UMINUS'),
+    ('AND', 'OR', 'NOT'),
+    ('left', 'EQUALTO', 'NOTEQUALTO'),
+    ('left', 'LESSTHANOREQUALTO', 'GREATERTHANOREQUALTO'),
+    ('left', 'LESSTHAN', 'GREATERTHAN'), 
+    ('left', 'INCREMENT', 'DECREMENT'),
+    ('left', 'MULTIPLICATION', 'DIVISION','MODULO'),
+    ('left', 'PLUS', 'MINUS'),
+    ('left', 'POW'),
+    ('left', 'LPAREN', 'RPAREN'),
+))
 
 start = 'S'
 
@@ -81,6 +90,12 @@ def p_INCREMENT(p):
     """
     p[0] = ('INCREMENT', p[1])
     
+def p_DECREMENT(p):
+    """
+    stmt : NAME DECREMENT SEMICOL
+    """
+    p[0] = ('DECREMENT', p[1])
+    
 def p_LIST_ACCESS(p):
     """
     exp : NAME LSQB INT RSQB
@@ -116,6 +131,12 @@ def p_exp_name(p):
     exp : NAME
     """
     p[0] = ('NAME', p[1])
+    
+def p_NOT(p):
+    """
+    exp : NOT exp
+    """
+    p[0] = ('NOT', p[2])
 
 def p_exp_bin(p):
     """ 
@@ -134,8 +155,6 @@ def p_exp_bin(p):
         | exp AND exp
         | exp OR exp
         | exp POW exp
-        | exp DECREMENT
-        | exp NOT
         | STRING
     """
     if len(p) > 3:
@@ -194,6 +213,12 @@ def p_WHILE(p):
     block_w : WHILE LPAREN exp RPAREN SEMICOL
     """
     p[0] = ('DOWHILE', p[3])
+    
+def p_FUNCTION(p):
+    """
+    stmt : FUNCTION NAME LPAREN exp RPAREN LCURLY S RETURN exp RCURLY
+    """
+    p[0] = ('FUNCTION', p[2], p[4], p[7], p[9])
 
 def p_error(p):
     print("Syntax error at token", p.value, p.type, p.lexpos)

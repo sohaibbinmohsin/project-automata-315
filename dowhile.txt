@@ -1,18 +1,16 @@
 int i = 0;
-int j = 0;
-int k = 0;
 do {
+    int j = 0;
     do {
+        int k = 0;
         do {
             print("(",i,",",j,",",k,")");
             k++;
         }
         while (k < 2);
-        k = 0 ;
         j++;
     }
     while(j < 2);
-    j = 0 ;
     i++;
 }
 while(i < 2);
