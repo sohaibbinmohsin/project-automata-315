@@ -54,9 +54,12 @@ def p_var_assign(p):
     stmt : VARTYPE NAME ASSIGN exp SEMICOL
          | VARTYPE NAME ASSIGN stmt SEMICOL
          | NAME ASSIGN exp SEMICOL
+         | VARTYPE NAME
     """
     if len(p) == 5:
         p[0] = ('ASSIGN', p[1], p[3])
+    elif len(p) == 3:
+        p[0] = ('EMPTY-VAR', p[1], p[2])
     else: 
         p[0] = (p[2], p[1], p[4])
     
@@ -216,9 +219,21 @@ def p_WHILE(p):
     
 def p_FUNCTION(p):
     """
-    stmt : FUNCTION NAME LPAREN exp RPAREN LCURLY S RETURN exp RCURLY
+    stmt : FUNCTION NAME LPAREN stmt RPAREN LCURLY S RCURLY
     """
-    p[0] = ('FUNCTION', p[2], p[4], p[7], p[9])
+    p[0] = ('FUNCTION', p[2], p[4], p[7])
+    
+def p_RETURN(p):
+    """
+    stmt : RETURN LPAREN exp RPAREN SEMICOL
+    """
+    p[0] = ('RETURN', p[3])
+    
+def p_CALL(p):
+    """
+    exp : NAME LPAREN exp RPAREN
+    """
+    p[0] = ('CALL', p[1], p[3])
 
 def p_error(p):
     print("Syntax error at token", p.value, p.type, p.lexpos)

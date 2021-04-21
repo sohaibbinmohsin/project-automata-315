@@ -26,8 +26,14 @@ def exp_eval(p, environment):
     # print('p1:',p[1])
     if operator == 'PAREN':
         return exp_eval(p[1], environment)
+    elif operator == 'CALL':
+        # print('here')
+        return(stmt_eval(p, environment))
     elif operator == '+':
-        return exp_eval(p[1], environment) + exp_eval(p[2], environment)
+        try:
+            return exp_eval(p[1], environment) + exp_eval(p[2], environment)
+        except Exception:
+            raise TypeError('TypeError')
     elif operator == ',':
         # exp = [p[1], exp_eval(p[2])]
         return str(exp_eval(p[1], environment)) + " " + str(exp_eval(p[2], environment))
@@ -65,18 +71,35 @@ def exp_eval(p, environment):
         return exp_eval(p[1], environment) or exp_eval(p[2], environment)
     elif operator == 'NOT':
         return not exp_eval(p[1], environment)
+    elif operator == 'RETURN':
+        return exp_eval(p[1], environment)
     elif operator == 'UMINUS':
-        return (- exp_eval(p[1], environment))
+        return (-1)*(exp_eval(p[1], environment))
     elif operator == 'POP':
-        return env_lookup(p[1], environment)[1].pop(p[2])
+        try:
+            return env_lookup(p[1], environment)[1].pop(p[2])
+        except Exception:
+            raise IndexError('IndexOutOfBoundsError')
     elif operator == 'PUSH':
         # print(environment[p[1]][1])
-        return env_lookup(p[1], environment)[1].append(exp_eval(p[2], environment))
+        try:
+            return env_lookup(p[1], environment)[1].append(exp_eval(p[2], environment))
+        except Exception:
+            raise IndexError('IndexOutOfBoundsError')
     elif operator == 'INDEX' or operator == 'ACCESS':
-        return env_lookup(p[1], environment)[1][p[2]]
+        try:
+            return env_lookup(p[1], environment)[1][p[2]]
+        except Exception:
+            raise IndexError('IndexOutOfBoundsError')
     elif operator == 'SLICE':
-        x = slice(p[2], p[3])
-        return env_lookup(p[1], environment)[1][x]
+        try:
+            x = slice(p[2], p[3])
+            return env_lookup(p[1], environment)[1][x]
+        except Exception:
+            raise IndexError('IndexOutOfBoundsError')
+    elif operator == 'EMPTY-VAR':
+        # print(p)
+        environment[p[2]] = p[1]
     elif operator == 'ASSIGN':
         # print('here')
         # print(environment[p[1]])
@@ -215,12 +238,17 @@ def stmt_eval(p, environment):
         # print(p[3][3][1])
         # print(exp_eval(p[3][1]))
         # print(p[5])
+        # print(p[1])
+        # print(exp_eval(p[1], local_env))
         if exp_eval(p[1], local_env) == True:
+            # print('here1')
             run_program(p[2], local_env)
         elif exp_eval(p[3][1], local_env) == True:
+            # print('here')
             run_program(p[3][2], local_env)
         else:
             run_program(p[3][3][1], local_env)
+        # print('here3')
     elif stype == 'DOWHILE':
         # print('local:',local_variables)
         # print(local_env)
@@ -254,28 +282,51 @@ def stmt_eval(p, environment):
         # environment[p[1]].pop(p[2])
         exp_eval(p, environment)
         # print(environment)
-    elif stype == 'INCREMENT' or stype == 'DECREMENT':
+    elif stype == 'INCREMENT' or stype == 'DECREMENT' or stype == 'RETURN':
         exp_eval(p, environment)
     elif stype == 'CALL':
+        # print('here')
+        # print(p[1])
+        # print(p[2])
         val = env_lookup(p[1], environment)
+        arg = [p[2]]
+        # print(len(arg))
+        # print(arg)
         if(val[0] == 'function'):
             param = val[1]
+            # print('p:',param)
+            # print(exp_eval(p[2], environment))
             body = val[2]
             env = val[3]
-            if len(p[2]) != len(param):
+            # print(len(arg))
+            # print(val[1])
+            # print(len(param))
+            if len(arg) != len(param):
                 print("wrong no of args")
             else:
                 new_env = (env, {})
-                for i in range(0, len(p[2])):
-                    arg_val = exp_eval(p[2][i], environment)
-                    new_env[1][param[i]] = arg_val
+                for i in range(0, len(arg)):
+                    # print('arg:',arg[i])
+                    arg_val = exp_eval(arg[i], environment)
+                    # print('val:',arg_val)
+                    # print('new:',new_env)
+                    # print(param[i])
+                    p = list(param.keys())
+                    # print('p:',p)
+                    # print(p[i])
+                    new_env[1][p[i]] = ('int', arg_val)
+                    # print('new:',new_env)
                 try:
+                    # print(body)
                     run_program(body, new_env)
                     return None
                 except Exception as return_value:
                     return return_value
         else:
             print("call to non-function")
+    elif stype == 'FUNCTION':
+        environment[1][p[1]] = ('function', {p[2][2]:(p[2][1],0)}, p[3], environment)
+        # print(environment)
     else:
         exp_assign(p, environment)
         # print('here2')

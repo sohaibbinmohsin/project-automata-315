@@ -83,6 +83,14 @@ def t_VARTYPE(t):
     r'int|float|char|string|bool'
     return t
 
+def t_FUNCTION(t):
+    r'function'
+    return t
+
+def t_RETURN(t):
+    r'return'
+    return t
+
 def t_POP(t):
     r'.pop'
     return t
